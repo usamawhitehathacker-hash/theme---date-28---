@@ -1,0 +1,33 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Add Top Utility Bar, 3-Row Header Layout Support, and Shrink-on-Scroll sticky behavior to the header section. This creates a thin utility bar above the main header with phone number, email, and social icons, adds support for a 3-row header layout, and implements a shrink-on-scroll sticky option.",
+  "status": "in_progress",
+  "steps": [
+    "Step 1: Create `snippets/header-top-bar.liquid` - A new snippet for the top utility bar. It should render a thin bar with: left side (phone number + email as links), right side (social media icon links). Accept parameters: show_top_bar, phone, email, social links (facebook, instagram, twitter, pinterest, tiktok, youtube). Use the existing icon SVG inline pattern. Style with {% stylesheet %} scoped CSS. Use flex layout with small font size, centered vertically. Include color_scheme support.",
+    "Step 2: Modify `sections/header.liquid` schema - Add new settings in a 'Top utility bar' header group: checkbox 'show_top_bar' (default false), text 'top_bar_phone', text 'top_bar_email', url fields for social links (top_bar_facebook, top_bar_instagram, top_bar_twitter, top_bar_pinterest, top_bar_tiktok, top_bar_youtube), color_scheme 'color_scheme_top_bar' (default 'secondary'). Add a new sticky option 'shrink' to the existing enable_sticky_header select.",
+    "Step 3: Modify `sections/header.liquid` HTML rendering - Before the existing rows loop, conditionally render the top utility bar snippet if section.settings.show_top_bar is true. Pass all top_bar_* settings as parameters. The top bar should appear ABOVE the existing header rows inside header-component.",
+    "Step 4: Create 5 new SVG icon assets for social media: `assets/icon-facebook.svg`, `assets/icon-instagram.svg`, `assets/icon-twitter.svg`, `assets/icon-pinterest.svg`, `assets/icon-tiktok.svg`, `assets/icon-youtube.svg` - minimal line-style SVGs matching the existing icon style (stroke-based, currentColor, 16x16 or similar viewBox).",
+    "Step 5: Modify `assets/header.js` - Add shrink-on-scroll behavior. When sticky mode is 'shrink', on scroll down the header should transition to a compact height (reduce --header-padding, scale down logo). On scroll up or at top, restore full height. Use CSS custom properties (--header-shrink-scale) and a data-shrink-state attribute. Add 'shrink' to the sticky mode handling in connectedCallback and #updateScrollState.",
+    "Step 6: Add CSS for shrink-on-scroll in `sections/header.liquid` stylesheet - Add styles for [data-shrink-state='shrunk'] that reduce padding, scale logo, and use smooth transitions. The header should animate between normal and shrunk states.",
+    "Step 7: Update `locales/en.default.json` - Add translation keys under a new 'header' namespace: 'top_bar_phone_label', 'top_bar_email_label'. Add to 'settings' namespace: 'show_top_bar', 'top_bar_phone', 'top_bar_email', 'shrink' option label."
+  ],
+  "acceptance_criteria": [
+    "snippets/header-top-bar.liquid exists and renders a utility bar with phone, email, and social icon links",
+    "sections/header.liquid schema contains all top_bar_* settings and the 'shrink' sticky option",
+    "The top bar renders conditionally inside header-component when show_top_bar is enabled",
+    "Social SVG icons exist in assets/ directory",
+    "header.js handles 'shrink' sticky mode with smooth shrink/expand on scroll",
+    "CSS transitions for shrink state are defined in header.liquid stylesheet",
+    "All new locale keys are added to en.default.json",
+    "All JSON (schema, locale) is valid and parseable"
+  ],
+  "verification": [
+    "Run: node -e \"JSON.parse(require('fs').readFileSync('locales/en.default.json'))\" to verify locale JSON validity",
+    "Run: node --check assets/header.js to verify JS syntax",
+    "Verify snippets/header-top-bar.liquid file exists and contains proper Liquid syntax",
+    "Verify all 6 SVG files exist in assets/"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

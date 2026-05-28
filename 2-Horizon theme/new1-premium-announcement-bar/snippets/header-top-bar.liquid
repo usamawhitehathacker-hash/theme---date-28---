@@ -1,0 +1,95 @@
+<div class="header-top-bar">
+  <div class="header-top-bar__left">
+    {% if phone != blank %}
+      <a href="tel:{{ phone | replace: ' ', '' }}" class="header-top-bar__link">
+        {{ phone }}
+      </a>
+    {% endif %}
+    {% if email != blank %}
+      <a href="mailto:{{ email }}" class="header-top-bar__link">
+        {{ email }}
+      </a>
+    {% endif %}
+  </div>
+  <div class="header-top-bar__right">
+    {% if facebook != blank %}
+      <a href="{{ facebook }}" class="header-top-bar__social-link" target="_blank" rel="noopener" aria-label="Facebook">
+        {{ 'icon-facebook.svg' | inline_asset_content }}
+      </a>
+    {% endif %}
+    {% if instagram != blank %}
+      <a href="{{ instagram }}" class="header-top-bar__social-link" target="_blank" rel="noopener" aria-label="Instagram">
+        {{ 'icon-instagram.svg' | inline_asset_content }}
+      </a>
+    {% endif %}
+    {% if twitter != blank %}
+      <a href="{{ twitter }}" class="header-top-bar__social-link" target="_blank" rel="noopener" aria-label="Twitter">
+        {{ 'icon-twitter.svg' | inline_asset_content }}
+      </a>
+    {% endif %}
+    {% if pinterest != blank %}
+      <a href="{{ pinterest }}" class="header-top-bar__social-link" target="_blank" rel="noopener" aria-label="Pinterest">
+        {{ 'icon-pinterest.svg' | inline_asset_content }}
+      </a>
+    {% endif %}
+    {% if tiktok != blank %}
+      <a href="{{ tiktok }}" class="header-top-bar__social-link" target="_blank" rel="noopener" aria-label="TikTok">
+        {{ 'icon-tiktok.svg' | inline_asset_content }}
+      </a>
+    {% endif %}
+    {% if youtube != blank %}
+      <a href="{{ youtube }}" class="header-top-bar__social-link" target="_blank" rel="noopener" aria-label="YouTube">
+        {{ 'icon-youtube.svg' | inline_asset_content }}
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .header-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 0.75rem;
+    line-height: 1;
+    padding: var(--padding-3xs) 0;
+  }
+
+  .header-top-bar__left {
+    display: flex;
+    align-items: center;
+    gap: var(--padding-sm);
+  }
+
+  .header-top-bar__right {
+    display: flex;
+    align-items: center;
+    gap: var(--padding-xs);
+  }
+
+  .header-top-bar__link {
+    color: currentColor;
+    text-decoration: none;
+  }
+
+  .header-top-bar__link:hover {
+    text-decoration: underline;
+  }
+
+  .header-top-bar__social-link {
+    color: currentColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .header-top-bar__social-link:hover {
+    opacity: 0.7;
+  }
+
+  .header-top-bar__social-link svg {
+    width: 16px;
+    height: 16px;
+  }
+{% endstylesheet %}
