@@ -2,7 +2,7 @@
   "id": "FEAT-002",
   "type": "feat",
   "description": "Enhance the mega menu with Promotional Banner/Image Block, Menu Item Badges, Custom Content Block (CTA), and multiple animation options. This adds premium-level mega menu features matching expensive Shopify themes.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Step 1: Create `snippets/mega-menu-promo.liquid` - A promotional banner block for inside mega menus. Accepts parameters: promo_image (image_picker), promo_heading (text), promo_text (richtext), promo_button_label (text), promo_button_link (url), promo_image_ratio (select). Renders an attractive card with image, overlay text, and CTA button. Styled with {% stylesheet %} scoped CSS. Uses aspect-ratio for the image, gradient overlay for text readability, and button styling consistent with theme.",
     "Step 2: Modify `blocks/_header-menu.liquid` schema - Add new settings: (a) Under a 'Menu item badges' header: text 'badge_text' (for the nav item badge like 'NEW', 'SALE'), select 'badge_style' (options: 'solid', 'outline', default: 'solid'), color 'badge_color' (no blank - use checkbox), checkbox 'show_badge'. (b) Under 'Promotional block' header: checkbox 'show_promo', image_picker 'promo_image', text 'promo_heading', richtext 'promo_text', text 'promo_button_label', url 'promo_button_link', select 'promo_image_ratio' (16/9, 4/5, 1/1). (c) Under existing appearance: select 'mega_menu_animation' with options 'clip-path' (default, existing behavior), 'fade', 'slide-down', 'scale-up'.",
@@ -33,5 +33,5 @@
     "Verify blocks/_header-menu.liquid schema JSON is valid (extract and parse)"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "All validation passes. Used NODE_OPTIONS='' prefix for node commands (as per FEAT-001 findings). Schema uses JSONC format. Badge added only to first menu item via forloop.first condition. Animation is CSS-driven via data-animation attribute - minimal JS changes needed."
 }
