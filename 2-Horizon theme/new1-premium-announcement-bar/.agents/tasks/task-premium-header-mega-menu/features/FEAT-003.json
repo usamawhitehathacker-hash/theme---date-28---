@@ -2,7 +2,7 @@
   "id": "FEAT-003",
   "type": "feat",
   "description": "Add Wishlist Icon in header actions and Mobile Bottom Navigation Bar. This adds a heart/wishlist icon with count badge to the header utility area, and creates a fixed mobile bottom navigation bar with Home, Search, Menu, Wishlist, and Cart icons.",
-  "status": "in_progress",
+  "status": "completed",
   "steps": [
     "Step 1: Create `assets/icon-wishlist.svg` - A heart outline SVG icon matching the existing icon style (stroke-based, currentColor, similar viewBox to other header icons like the cart icon which is ~24x24).",
     "Step 2: Modify `snippets/header-actions.liquid` - Add a wishlist icon link BEFORE the cart icon section. Conditionally render if section.settings.show_wishlist is true. Render as an <a> tag linking to section.settings.wishlist_page (url setting) or '/pages/wishlist' default. Include the heart SVG icon inline and a wishlist count bubble (span with class 'wishlist-bubble' and id 'wishlist-count', default hidden). Include both icon and text display modes following the existing cart_icon pattern.",
@@ -38,5 +38,5 @@
     "Verify all new SVG files exist in assets/"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "All validation passes. Used NODE_OPTIONS='' prefix for node commands (as per FEAT-001 findings). Locale uses JSONC format. Added wishlist icon between account and cart sections in header-actions.liquid. Mobile bottom nav uses Component base class from @theme/component with on:click event handlers. Schema settings placed before Appearance header group. The header-actions.liquid snippet receives section object as a parameter from the parent render call so section.settings.show_wishlist is accessible."
 }
