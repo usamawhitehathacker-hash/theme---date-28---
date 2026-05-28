@@ -1,0 +1,112 @@
+{%- doc -%}
+  Renders a promotional banner/card for inside mega menu dropdowns.
+
+  @param {object} promo_image - Image object from image_picker setting.
+  @param {string} promo_heading - Heading text for the promo card.
+  @param {string} promo_text - Short description text for the promo card.
+  @param {string} promo_button_label - CTA button label text.
+  @param {string} promo_button_link - URL for the CTA button/card link.
+  @param {string} promo_image_ratio - Aspect ratio for the image (e.g. "16 / 9", "4 / 5", "1 / 1").
+  @param {number} image_border_radius - Border radius in px for the card.
+{%- enddoc -%}
+
+{% if promo_image != blank %}
+  {% assign tag = 'div' %}
+  {% if promo_button_link != blank %}
+    {% assign tag = 'a' %}
+  {% endif %}
+
+  <{{ tag }}
+    class="mega-menu-promo"
+    style="--promo-aspect-ratio: {{ promo_image_ratio | default: '16 / 9' }}; --promo-border-radius: {{ image_border_radius | default: 0 }}px;"
+    {% if promo_button_link != blank and tag == 'a' %}
+      href="{{ promo_button_link }}"
+    {% endif %}
+  >
+    <div class="mega-menu-promo__image">
+      {{ promo_image | image_url: width: 600 | image_tag: class: 'mega-menu-promo__img', loading: 'lazy' }}
+    </div>
+    <div class="mega-menu-promo__overlay"></div>
+    <div class="mega-menu-promo__content">
+      {% if promo_heading != blank %}
+        <p class="mega-menu-promo__heading">{{ promo_heading }}</p>
+      {% endif %}
+      {% if promo_text != blank %}
+        <p class="mega-menu-promo__text">{{ promo_text }}</p>
+      {% endif %}
+      {% if promo_button_label != blank %}
+        <span class="mega-menu-promo__button">{{ promo_button_label }}</span>
+      {% endif %}
+    </div>
+  </{{ tag }}>
+{% endif %}
+
+{% stylesheet %}
+  .mega-menu-promo {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--promo-border-radius);
+    aspect-ratio: var(--promo-aspect-ratio);
+    display: block;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  .mega-menu-promo__image {
+    position: absolute;
+    inset: 0;
+  }
+
+  .mega-menu-promo__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mega-menu-promo__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .mega-menu-promo__content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--padding-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    color: #fff;
+  }
+
+  .mega-menu-promo__heading {
+    font-size: var(--font-size--lg);
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .mega-menu-promo__text {
+    font-size: var(--font-size--sm);
+    margin: 0;
+    line-height: 1.4;
+    opacity: 0.9;
+  }
+
+  .mega-menu-promo__button {
+    display: inline-block;
+    font-size: var(--font-size--sm);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    margin-top: var(--gap-2xs);
+    color: #fff;
+  }
+
+  a.mega-menu-promo:hover .mega-menu-promo__button {
+    text-decoration-thickness: 2px;
+  }
+{% endstylesheet %}
