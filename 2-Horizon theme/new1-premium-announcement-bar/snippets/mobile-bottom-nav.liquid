@@ -1,0 +1,110 @@
+{% doc %}
+  Mobile Bottom Navigation Bar
+  Renders a fixed bottom navigation with Home, Search, Menu, Wishlist, and Cart icons.
+  @param {boolean} show_wishlist - Whether to show wishlist icon
+  @param {string} wishlist_page - URL for wishlist page
+{% enddoc %}
+
+<mobile-bottom-nav class="mobile-bottom-nav">
+  <nav class="mobile-bottom-nav__inner" role="navigation" aria-label="{{ 'accessibility.mobile_navigation' | t }}">
+    <a href="/" class="mobile-bottom-nav__item{% if request.path == '/' %} mobile-bottom-nav__item--active{% endif %}">
+      <span class="mobile-bottom-nav__icon">{{ 'icon-home.svg' | inline_asset_content }}</span>
+      <span class="mobile-bottom-nav__label">{{ 'content.home' | t }}</span>
+    </a>
+    <button type="button" class="mobile-bottom-nav__item button-unstyled" ref="searchBtn" on:click="/openSearch">
+      <span class="mobile-bottom-nav__icon">{{ 'icon-search.svg' | inline_asset_content }}</span>
+      <span class="mobile-bottom-nav__label">{{ 'content.search' | t }}</span>
+    </button>
+    <button type="button" class="mobile-bottom-nav__item button-unstyled" ref="menuBtn" on:click="/openMenu">
+      <span class="mobile-bottom-nav__icon">{{ 'icon-menu-hamburger.svg' | inline_asset_content }}</span>
+      <span class="mobile-bottom-nav__label">{{ 'content.menu' | t }}</span>
+    </button>
+    {% if show_wishlist %}
+      <a href="{{ wishlist_page | default: '/pages/wishlist' }}" class="mobile-bottom-nav__item{% if request.path contains 'wishlist' %} mobile-bottom-nav__item--active{% endif %}">
+        <span class="mobile-bottom-nav__icon">{{ 'icon-wishlist.svg' | inline_asset_content }}</span>
+        <span class="mobile-bottom-nav__label">{{ 'content.wishlist' | t }}</span>
+      </a>
+    {% endif %}
+    <a href="{{ routes.cart_url }}" class="mobile-bottom-nav__item{% if request.path == '/cart' %} mobile-bottom-nav__item--active{% endif %}">
+      <span class="mobile-bottom-nav__icon">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+      <span class="mobile-bottom-nav__label">{{ 'content.cart_title' | t }}</span>
+      {% render 'cart-bubble', limit: 100 %}
+    </a>
+  </nav>
+
+  <script src="{{ 'mobile-bottom-nav.js' | asset_url }}" type="module" fetchpriority="low"></script>
+</mobile-bottom-nav>
+
+{% stylesheet %}
+  mobile-bottom-nav {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    mobile-bottom-nav {
+      display: block;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: var(--layer-overlay);
+      background-color: var(--color-background);
+      border-top: 1px solid var(--color-border);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    body:has(mobile-bottom-nav) {
+      padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+    }
+  }
+
+  .mobile-bottom-nav__inner {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 60px;
+    padding-inline: var(--padding-xs);
+  }
+
+  .mobile-bottom-nav__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    text-decoration: none;
+    color: var(--color-foreground);
+    opacity: 0.7;
+    transition: opacity var(--animation-speed) var(--animation-easing);
+    position: relative;
+    padding: var(--padding-2xs);
+    cursor: pointer;
+  }
+
+  .mobile-bottom-nav__item--active {
+    opacity: 1;
+  }
+
+  .mobile-bottom-nav__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-bottom-nav__icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mobile-bottom-nav__label {
+    font-size: 0.625rem;
+    line-height: 1;
+    text-transform: capitalize;
+  }
+
+  .mobile-bottom-nav .cart-bubble {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+{% endstylesheet %}

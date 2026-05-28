@@ -54,7 +54,9 @@
     "find_country": "Find country",
     "view_pricing_info": "View pricing information",
     "price_filter_low": "Low price",
-    "price_filter_high": "High price"
+    "price_filter_high": "High price",
+    "wishlist": "Wishlist",
+    "mobile_navigation": "Mobile navigation"
   },
   "announcement_bar": {
     "label": "Announcement bar",
@@ -326,7 +328,11 @@
     "product_custom_property_character_count": "{{ used_chars }}/{{ max_chars }} characters used",
     "menu_item_badges": "Menu item badges",
     "promotional_block": "Promotional block",
-    "animation": "Animation"
+    "animation": "Animation",
+    "wishlist": "Wishlist",
+    "home": "Home",
+    "search": "Search",
+    "menu": "Menu"
   },
   "fields": {
     // Separates min and max values in price range filter
@@ -343,7 +349,12 @@
     "promo_button_label": "Button label",
     "promo_button_link": "Button link",
     "promo_image_ratio": "Image ratio",
-    "mega_menu_animation": "Menu animation"
+    "mega_menu_animation": "Menu animation",
+    "show_wishlist": "Show wishlist icon",
+    "wishlist": "Wishlist",
+    "wishlist_page": "Wishlist page link",
+    "show_mobile_bottom_nav": "Show mobile bottom navigation",
+    "mobile_bottom_navigation": "Mobile bottom navigation"
   },
   "options": {
     "solid": "Solid",

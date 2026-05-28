@@ -418,6 +418,13 @@
   {% endif %}
 </header-component>
 
+{% if section.settings.show_mobile_bottom_nav %}
+  {% render 'mobile-bottom-nav',
+    show_wishlist: section.settings.show_wishlist,
+    wishlist_page: section.settings.wishlist_page
+  %}
+{% endif %}
+
 <script
   src="{{ 'header.js' | asset_url }}"
   type="module"
@@ -1470,6 +1477,32 @@
       "label": "t:settings.color_scheme",
       "default": "secondary",
       "visible_if": "{{ section.settings.show_top_bar }}"
+    },
+    {
+      "type": "header",
+      "content": "t:settings.wishlist"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "label": "t:settings.show_wishlist",
+      "default": false
+    },
+    {
+      "type": "url",
+      "id": "wishlist_page",
+      "label": "t:settings.wishlist_page",
+      "visible_if": "{{ section.settings.show_wishlist }}"
+    },
+    {
+      "type": "header",
+      "content": "t:settings.mobile_bottom_navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mobile_bottom_nav",
+      "label": "t:settings.show_mobile_bottom_nav",
+      "default": false
     },
     {
       "type": "header",
