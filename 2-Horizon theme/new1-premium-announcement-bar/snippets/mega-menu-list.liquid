@@ -344,7 +344,7 @@
     </span>
 {% endcase %}
 
-{% if show_promo and promo_image != blank %}
+{% if show_promo and promo_image != blank and menu_content_type != 'featured_products' and menu_content_type != 'featured_collections' %}
   <span class="mega-menu__content mega-menu__promo-wrapper" style="--menu-content-columns-desktop: 2; --menu-content-columns-tablet: 2;">
     {% render 'mega-menu-promo',
       promo_image: promo_image,

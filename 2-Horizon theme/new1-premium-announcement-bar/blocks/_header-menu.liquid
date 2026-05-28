@@ -108,7 +108,7 @@
           >
             <span class="menu-list__link-title">{{- link.title -}}</span>
             {% if block_settings.show_badge and block_settings.badge_text != blank and forloop.first %}
-              <span class="menu-list__badge menu-list__badge--{{ block_settings.badge_style }}">{{ block_settings.badge_text }}</span>
+              <span class="menu-list__badge menu-list__badge--{{ block_settings.badge_style }}" role="status" aria-label="Badge: {{ block_settings.badge_text }}">{{ block_settings.badge_text }}</span>
             {% endif %}
           </a>
           {%- if link.links != blank -%}
@@ -735,6 +735,14 @@
     transition: opacity var(--submenu-animation-speed) var(--animation-easing), visibility 0s;
   }
 
+  header-menu[data-animation='fade'] .menu-list__submenu-inner {
+    transition-delay: 0.05s;
+  }
+
+  header-menu[data-animation='fade'] .header__underlay-open::after {
+    box-shadow: none;
+  }
+
   header-menu[data-animation='slide-down'] .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu {
     clip-path: none;
     opacity: 0;
@@ -746,6 +754,14 @@
     opacity: 1;
     transform: translateY(0);
     transition: opacity var(--submenu-animation-speed) var(--animation-easing), transform var(--submenu-animation-speed) var(--ease-out-cubic), visibility 0s;
+  }
+
+  header-menu[data-animation='slide-down'] .menu-list__submenu-inner {
+    transition-delay: 0.05s;
+  }
+
+  header-menu[data-animation='slide-down'] .header__underlay-open::after {
+    box-shadow: none;
   }
 
   header-menu[data-animation='scale-up'] .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu {
@@ -760,6 +776,14 @@
     opacity: 1;
     transform: scale(1);
     transition: opacity var(--submenu-animation-speed) var(--animation-easing), transform var(--submenu-animation-speed) var(--ease-out-cubic), visibility 0s;
+  }
+
+  header-menu[data-animation='scale-up'] .menu-list__submenu-inner {
+    transition-delay: 0.05s;
+  }
+
+  header-menu[data-animation='scale-up'] .header__underlay-open::after {
+    box-shadow: none;
   }
 {% endstylesheet %}
 
@@ -962,6 +986,7 @@
       "type": "checkbox",
       "id": "show_badge",
       "label": "t:settings.show_badge",
+      "info": "Badge will display on the first menu item in this menu",
       "default": false
     },
     {

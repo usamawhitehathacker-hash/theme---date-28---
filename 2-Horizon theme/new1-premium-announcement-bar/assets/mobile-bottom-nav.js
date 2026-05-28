@@ -11,6 +11,10 @@ import { Component } from '@theme/component';
  * @extends {Component<Refs>}
  */
 class MobileBottomNav extends Component {
+  connectedCallback() {
+    super.connectedCallback();
+  }
+
   /**
    * Open the search modal by finding and clicking the header search trigger
    */

@@ -113,10 +113,9 @@
     </div>
   {% endif %}
 
-  {% if section.settings.show_wishlist %}
-    {% assign wishlist_url = section.settings.wishlist_page | default: '/pages/wishlist' %}
+  {% if section.settings.show_wishlist and section.settings.wishlist_page != blank %}
     <a
-      href="{{ wishlist_url }}"
+      href="{{ section.settings.wishlist_page }}"
       class="header-actions__action header-actions__wishlist{% if display_style == 'text' %} header-actions__text-style{% endif %}"
       aria-label="{{ 'accessibility.wishlist' | t }}"
     >
