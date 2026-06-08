@@ -1,5 +1,5 @@
 interface:
-  display_name: "Shopify Horizon Developer"
-  short_description: "Expert Horizon theme development"
+  display_name: "Shopify Expert Developer"
+  short_description: "Expert Shopify theme coder development"
   brand_color: "#008060"
   default_prompt: "Use $shopify-horizon-developer to plan and implement a Shopify Horizon theme change safely."
