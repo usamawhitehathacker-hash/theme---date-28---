@@ -1108,6 +1108,7 @@
     "shape": "Shape",
     // Checkbox label to toggle visibility of UI elements
     "show": "Show",
+    "hide": "Hide",
     "show_as_accordion": "Show as accordion on mobile",
     "show_author": "Author",
     "show_alignment": "Show alignment",

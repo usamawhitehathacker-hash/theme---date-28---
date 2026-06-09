@@ -50,6 +50,26 @@
     },
     {
       "type": "select",
+      "id": "panel_width",
+      "label": "t:settings.panel_width",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "t:options.inherit"
+        },
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
       "id": "layout",
       "label": "t:settings.layout",
       "options": [
@@ -77,6 +97,36 @@
       "default": "inherit"
     },
     {
+      "type": "range",
+      "id": "content_width",
+      "label": "t:settings.content_width",
+      "min": 0,
+      "max": 45,
+      "step": 1,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "panel_padding",
+      "label": "t:settings.panel_padding",
+      "min": 0,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "t:settings.column_gap",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
       "type": "select",
       "id": "columns_desktop",
       "label": "t:settings.desktop_columns",
@@ -100,6 +150,132 @@
         {
           "value": "6",
           "label": "6"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "columns_tablet",
+      "label": "t:settings.tablet_columns",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "t:options.inherit"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:settings.image_ratio",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "t:options.inherit"
+        },
+        {
+          "value": "adapt",
+          "label": "t:options.auto"
+        },
+        {
+          "value": "4 / 5",
+          "label": "t:options.portrait"
+        },
+        {
+          "value": "1 / 1",
+          "label": "t:options.square"
+        },
+        {
+          "value": "16 / 9",
+          "label": "t:options.landscape"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "t:settings.card_corner_radius",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "show_parent_link",
+      "label": "t:settings.show_parent_link",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "t:options.inherit"
+        },
+        {
+          "value": "show",
+          "label": "t:options.show"
+        },
+        {
+          "value": "hide",
+          "label": "t:options.hide"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "show_view_all",
+      "label": "t:settings.show_view_all_link",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "t:options.inherit"
+        },
+        {
+          "value": "show",
+          "label": "t:options.show"
+        },
+        {
+          "value": "hide",
+          "label": "t:options.hide"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "select",
+      "id": "animation",
+      "label": "t:settings.animation",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "t:options.inherit"
+        },
+        {
+          "value": "none",
+          "label": "t:options.none"
+        },
+        {
+          "value": "fade",
+          "label": "t:options.fade"
+        },
+        {
+          "value": "slide",
+          "label": "t:options.slide"
         }
       ],
       "default": "inherit"

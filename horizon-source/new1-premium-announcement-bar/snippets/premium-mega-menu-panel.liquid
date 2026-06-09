@@ -11,7 +11,11 @@
 
 {% liquid
   assign panel_settings = panel_block.settings
-  assign panel_width = menu_block_settings.premium_panel_width | default: section.settings.section_width
+  assign panel_width = panel_settings.panel_width | default: 'inherit'
+  if panel_width == 'inherit'
+    assign panel_width = menu_block_settings.premium_panel_width | default: section.settings.section_width
+  endif
+
   assign panel_layout = panel_settings.layout | default: 'inherit'
   if panel_layout == 'inherit'
     assign panel_layout = menu_block_settings.premium_layout | default: 'right_rail'
@@ -22,13 +26,56 @@
     assign panel_columns_desktop = menu_block_settings.premium_columns_desktop | default: 4
   endif
   assign panel_columns_desktop = panel_columns_desktop | plus: 0
-  assign panel_columns_tablet = menu_block_settings.premium_columns_tablet | default: 3
-  assign panel_content_width = menu_block_settings.premium_content_width | default: 30
-  assign panel_padding = menu_block_settings.premium_panel_padding | default: 32
-  assign panel_gap = menu_block_settings.premium_column_gap | default: 28
-  assign panel_card_radius = menu_block_settings.premium_card_radius | default: menu_block_settings.image_border_radius | default: 0
-  assign panel_image_ratio = menu_block_settings.premium_image_ratio | default: '4 / 5'
-  assign panel_animation = menu_block_settings.premium_animation | default: 'fade'
+  assign panel_columns_tablet = panel_settings.columns_tablet | default: 'inherit'
+  if panel_columns_tablet == 'inherit'
+    assign panel_columns_tablet = menu_block_settings.premium_columns_tablet | default: 3
+  endif
+  assign panel_columns_tablet = panel_columns_tablet | plus: 0
+
+  assign panel_content_width = panel_settings.content_width
+  if panel_content_width == 0 or panel_content_width == blank
+    assign panel_content_width = menu_block_settings.premium_content_width | default: 30
+  endif
+
+  assign panel_padding = panel_settings.panel_padding
+  if panel_padding == 0 or panel_padding == blank
+    assign panel_padding = menu_block_settings.premium_panel_padding | default: 32
+  endif
+
+  assign panel_gap = panel_settings.column_gap
+  if panel_gap == 0 or panel_gap == blank
+    assign panel_gap = menu_block_settings.premium_column_gap | default: 28
+  endif
+
+  assign panel_card_radius = panel_settings.card_radius
+  if panel_card_radius == blank
+    assign panel_card_radius = menu_block_settings.premium_card_radius | default: menu_block_settings.image_border_radius | default: 0
+  endif
+
+  assign panel_image_ratio = panel_settings.image_ratio | default: 'inherit'
+  if panel_image_ratio == 'inherit'
+    assign panel_image_ratio = menu_block_settings.premium_image_ratio | default: '4 / 5'
+  endif
+
+  assign panel_animation = panel_settings.animation | default: 'inherit'
+  if panel_animation == 'inherit'
+    assign panel_animation = menu_block_settings.premium_animation | default: 'fade'
+  endif
+
+  assign show_parent_link = menu_block_settings.premium_show_parent_link
+  if panel_settings.show_parent_link == 'show'
+    assign show_parent_link = true
+  elsif panel_settings.show_parent_link == 'hide'
+    assign show_parent_link = false
+  endif
+
+  assign show_view_all = menu_block_settings.premium_show_view_all
+  if panel_settings.show_view_all == 'show'
+    assign show_view_all = true
+  elsif panel_settings.show_view_all == 'hide'
+    assign show_view_all = false
+  endif
+
   assign trimmed_children = children | strip
   assign has_premium_content = false
 
@@ -72,7 +119,7 @@
       {% endif %}
 
       <div class="premium-mega-menu__navigation">
-        {% if menu_block_settings.premium_show_parent_link %}
+        {% if show_parent_link %}
           <a class="premium-mega-menu__parent-link" href="{{ parent_link.url }}">
             {{- parent_link.title -}}
           </a>
@@ -95,7 +142,7 @@
           %}
         </div>
 
-        {% if menu_block_settings.premium_show_view_all and parent_link.url != blank %}
+        {% if show_view_all and parent_link.url != blank %}
           <a class="premium-mega-menu__view-all" href="{{ parent_link.url }}">
             {{ 'actions.view_all' | t }} {{ parent_link.title }}
           </a>
