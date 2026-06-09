@@ -63,9 +63,6 @@
   endif
 
   assign show_parent_link = section.settings.premium_show_parent_link
-  if show_parent_link == blank
-    assign show_parent_link = menu_block_settings.premium_show_parent_link
-  endif
   if panel_settings.show_parent_link == 'show'
     assign show_parent_link = true
   elsif panel_settings.show_parent_link == 'hide'
@@ -73,9 +70,6 @@
   endif
 
   assign show_view_all = section.settings.premium_show_view_all
-  if show_view_all == blank
-    assign show_view_all = menu_block_settings.premium_show_view_all
-  endif
   if panel_settings.show_view_all == 'show'
     assign show_view_all = true
   elsif panel_settings.show_view_all == 'hide'

@@ -13,23 +13,25 @@
 
 {% liquid
   assign block_settings = block.settings
+  assign header_settings = section.settings
   assign max_featured_items = 4
-  assign image_border_radius = block_settings.image_border_radius
-  assign drawer_menu_style = block_settings.menu_style
+  assign image_border_radius = header_settings.image_border_radius
+  assign drawer_menu_style = header_settings.menu_style
+  assign drawer_color_scheme = header_settings.menu_color_scheme
+  assign drawer_accordion = header_settings.drawer_accordion
+  assign drawer_accordion_expand_first = header_settings.drawer_accordion_expand_first
+  assign drawer_dividers = header_settings.drawer_dividers
 
   assign premium_mobile_collection_images = section.settings.premium_mobile_collection_images
-  if premium_mobile_collection_images == blank
-    assign premium_mobile_collection_images = block_settings.premium_mobile_collection_images
-  endif
 
   if drawer_menu_style == 'premium_mega' and premium_mobile_collection_images
     assign drawer_menu_style = 'collection_images'
   endif
 
   if drawer_menu_style == 'featured_collections'
-    assign ratio = block_settings.featured_collections_aspect_ratio
+    assign ratio = header_settings.featured_collections_aspect_ratio
   elsif drawer_menu_style == 'featured_products'
-    assign ratio = block_settings.featured_products_aspect_ratio
+    assign ratio = header_settings.featured_products_aspect_ratio
   endif
 
   ##
@@ -80,7 +82,7 @@
       ref="menuDrawer"
       class="
         menu-drawer
-        color-{{ block_settings.color_scheme }}
+        color-{{ drawer_color_scheme }}
       "
     >
       <button
@@ -96,8 +98,8 @@
       <nav
         class="menu-drawer__navigation"
         style="
-          {%- render 'menu-font-styles', settings: block_settings, menu_type: 'drawer' %}
-          {%- render 'submenu-font-styles', settings: block_settings %}
+          {%- render 'menu-font-styles', settings: header_settings, menu_type: 'drawer' %}
+          {%- render 'submenu-font-styles', settings: header_settings %}
         "
         aria-label="{{ 'accessibility.header_navigation_label' | t }}"
       >
@@ -115,15 +117,15 @@
               {% assign animation_index = animation_index | plus: 1 %}
               <li
                 style="--menu-drawer-animation-index: {{ animation_index }};"
-                class="{%- if block_settings.drawer_accordion -%}menu-drawer__list-item--deep{%- else -%}menu-drawer__list-item--flat{%- endif -%}{% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
+                class="{%- if drawer_accordion -%}menu-drawer__list-item--deep{%- else -%}menu-drawer__list-item--flat{%- endif -%}{% if drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
               >
-                {% if block_settings.drawer_accordion and link.links != blank %}
+                {% if drawer_accordion and link.links != blank %}
                   {%- comment -%}
                     Accordion for links with children, in menus with fewer than 3 levels of links
                   {%- endcomment -%}
                   {% liquid
                     assign should_open_first = false
-                    if first_accordion_open == false and block_settings.drawer_accordion_expand_first
+                    if first_accordion_open == false and drawer_accordion_expand_first
                       assign first_accordion_open = true
                       assign should_open_first = true
                     endif
@@ -188,7 +190,7 @@
                     children: accordion_children,
                     open_by_default_on_mobile: should_open_first
                   %}
-                {% elsif block_settings.drawer_accordion == false and link.links != blank %}
+                {% elsif drawer_accordion == false and link.links != blank %}
                   {%- comment -%}
                     Flat menus for links with children, in menus with fewer than 3 levels of links
                   {%- endcomment -%}
@@ -276,7 +278,7 @@
                   {%- endcomment -%}
                   <details
                     id="Details-menu-drawer-menu-item-{{ forloop.index }}"
-                    class="menu-drawer__menu-container{% if block_settings.drawer_dividers %} menu-drawer__menu-container--divider{% endif %}"
+                    class="menu-drawer__menu-container{% if drawer_dividers %} menu-drawer__menu-container--divider{% endif %}"
                   >
                     <summary
                       id="HeaderDrawer-{{ link.handle }}"
@@ -339,9 +341,9 @@
                               class="
                                 menu-drawer__list-item
                                 {% if childlink.links != blank -%}
-                                  {% if block_settings.drawer_accordion -%} menu-drawer__list-item--deep{% else -%} menu-drawer__list-item--flat{%- endif -%}
+                                  {% if drawer_accordion -%} menu-drawer__list-item--deep{% else -%} menu-drawer__list-item--flat{%- endif -%}
                                 {%- endif -%}
-                                {% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}
+                                {% if drawer_dividers %} menu-drawer__list-item--divider{% endif %}
                               "
                             >
                               {%- if childlink.links == blank -%}
@@ -371,12 +373,12 @@
                               {%- else -%}
                                 {% liquid
                                   assign should_open_first_nested = false
-                                  if first_accordion_open == false and block_settings.drawer_accordion and block_settings.drawer_accordion_expand_first
+                                  if first_accordion_open == false and drawer_accordion and drawer_accordion_expand_first
                                     assign first_accordion_open = true
                                     assign should_open_first_nested = true
                                   endif
                                 %}
-                                {% if block_settings.drawer_accordion %}
+                                {% if drawer_accordion %}
                                   {%- comment -%}
                                     Accordion for links with children, in menus with 3 levels of links
                                   {%- endcomment -%}
