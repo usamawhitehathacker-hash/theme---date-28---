@@ -1,123 +1,37 @@
 {%- doc -%}
-  Renders a premium mega menu panel with navigation columns and optional merchant-controlled content.
+  Renders a premium mega menu panel controlled by Header section settings.
 
   @param {object} parent_link - Top-level navigation link for this panel.
   @param {string} list_id - Unique list ID for menu markup.
   @param {object} section - Header section object.
-  @param {object} menu_block_settings - Parent header menu block settings.
-  @param {object} panel_block - Static panel block.
-  @param {string} children - Nested premium blocks rendered by the panel block.
 {%- enddoc -%}
 
 {% liquid
-  assign panel_settings = panel_block.settings
-  assign panel_width = panel_settings.panel_width | default: 'inherit'
-  if panel_width == 'inherit'
-    assign panel_width = section.settings.premium_panel_width | default: menu_block_settings.premium_panel_width | default: section.settings.section_width
-  endif
-
-  assign panel_layout = panel_settings.layout | default: 'inherit'
-  if panel_layout == 'inherit'
-    assign panel_layout = section.settings.premium_layout | default: menu_block_settings.premium_layout | default: 'right_rail'
-  endif
-
-  assign panel_columns_desktop = panel_settings.columns_desktop | default: 'inherit'
-  if panel_columns_desktop == 'inherit'
-    assign panel_columns_desktop = section.settings.premium_columns_desktop | default: menu_block_settings.premium_columns_desktop | default: 4
-  endif
+  assign panel_width = section.settings.premium_panel_width | default: section.settings.section_width
+  assign panel_columns_desktop = section.settings.premium_columns_desktop | default: 4
   assign panel_columns_desktop = panel_columns_desktop | plus: 0
-  assign panel_columns_tablet = panel_settings.columns_tablet | default: 'inherit'
-  if panel_columns_tablet == 'inherit'
-    assign panel_columns_tablet = section.settings.premium_columns_tablet | default: menu_block_settings.premium_columns_tablet | default: 3
-  endif
+  assign panel_columns_tablet = section.settings.premium_columns_tablet | default: 3
   assign panel_columns_tablet = panel_columns_tablet | plus: 0
-
-  assign panel_content_width = panel_settings.content_width
-  if panel_content_width == 0 or panel_content_width == blank
-    assign panel_content_width = section.settings.premium_content_width | default: menu_block_settings.premium_content_width | default: 30
-  endif
-
-  assign panel_padding = panel_settings.panel_padding
-  if panel_padding == 0 or panel_padding == blank
-    assign panel_padding = section.settings.premium_panel_padding | default: menu_block_settings.premium_panel_padding | default: 32
-  endif
-
-  assign panel_gap = panel_settings.column_gap
-  if panel_gap == 0 or panel_gap == blank
-    assign panel_gap = section.settings.premium_column_gap | default: menu_block_settings.premium_column_gap | default: 28
-  endif
-
-  assign panel_card_radius = panel_settings.card_radius
-  if panel_card_radius == blank
-    assign panel_card_radius = section.settings.premium_card_radius | default: menu_block_settings.premium_card_radius | default: menu_block_settings.image_border_radius | default: 0
-  endif
-
-  assign panel_image_ratio = panel_settings.image_ratio | default: 'inherit'
-  if panel_image_ratio == 'inherit'
-    assign panel_image_ratio = section.settings.premium_image_ratio | default: menu_block_settings.premium_image_ratio | default: '4 / 5'
-  endif
-
-  assign panel_animation = panel_settings.animation | default: 'inherit'
-  if panel_animation == 'inherit'
-    assign panel_animation = section.settings.premium_animation | default: menu_block_settings.premium_animation | default: 'fade'
-  endif
-
+  assign panel_padding = section.settings.premium_panel_padding | default: 32
+  assign panel_gap = section.settings.premium_column_gap | default: 28
+  assign panel_card_radius = section.settings.premium_card_radius | default: section.settings.image_border_radius | default: 0
+  assign panel_image_ratio = section.settings.premium_image_ratio | default: '4 / 5'
+  assign panel_animation = section.settings.premium_animation | default: 'fade'
   assign show_parent_link = section.settings.premium_show_parent_link
-  if panel_settings.show_parent_link == 'show'
-    assign show_parent_link = true
-  elsif panel_settings.show_parent_link == 'hide'
-    assign show_parent_link = false
-  endif
-
   assign show_view_all = section.settings.premium_show_view_all
-  if panel_settings.show_view_all == 'show'
-    assign show_view_all = true
-  elsif panel_settings.show_view_all == 'hide'
-    assign show_view_all = false
-  endif
-
-  assign trimmed_children = children | strip
-  assign has_premium_content = false
-
-  if trimmed_children != blank and panel_settings.hide_content == false and panel_layout != 'links_only'
-    assign has_premium_content = true
-  endif
-
-  if has_premium_content == false
-    assign panel_layout = 'links_only'
-  endif
 %}
 
 <div class="mega-menu premium-mega-menu section section--full-width-margin section--{{ panel_width }}">
   <div
-    class="premium-mega-menu__panel premium-mega-menu__panel--{{ panel_layout }} premium-mega-menu__panel--{{ panel_animation }}"
+    class="premium-mega-menu__panel premium-mega-menu__panel--links_only premium-mega-menu__panel--{{ panel_animation }}"
     style="
       --premium-mega-panel-padding: {{ panel_padding }}px;
       --premium-mega-gap: {{ panel_gap }}px;
-      --premium-mega-content-width: {{ panel_content_width }}%;
       --premium-mega-card-radius: {{ panel_card_radius }}px;
       --premium-mega-image-ratio: {{ panel_image_ratio }};
     "
-    {{ panel_block.shopify_attributes }}
   >
-    {% if panel_settings.heading != blank or panel_settings.intro != blank %}
-      <div class="premium-mega-menu__header">
-        {% if panel_settings.heading != blank %}
-          <p class="premium-mega-menu__heading">{{ panel_settings.heading }}</p>
-        {% endif %}
-        {% if panel_settings.intro != blank %}
-          <p class="premium-mega-menu__intro">{{ panel_settings.intro }}</p>
-        {% endif %}
-      </div>
-    {% endif %}
-
     <div class="premium-mega-menu__body">
-      {% if panel_layout == 'left_rail' %}
-        <div class="premium-mega-menu__content">
-          {{ children }}
-        </div>
-      {% endif %}
-
       <div class="premium-mega-menu__navigation">
         {% if show_parent_link %}
           <a class="premium-mega-menu__parent-link" href="{{ parent_link.url }}">
@@ -149,11 +63,6 @@
         {% endif %}
       </div>
 
-      {% if panel_layout == 'right_rail' or panel_layout == 'bottom_row' %}
-        <div class="premium-mega-menu__content">
-          {{ children }}
-        </div>
-      {% endif %}
     </div>
   </div>
 </div>

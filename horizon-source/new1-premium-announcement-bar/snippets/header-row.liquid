@@ -29,6 +29,34 @@
     assign row_key = item | append: '_row'
     assign item_row = settings[row_key] | default: 'top'
     assign item_column = settings[column_key] | default: 'left'
+    assign desktop_layout = settings.desktop_layout | default: 'custom'
+
+    case desktop_layout
+      when 'logo_left_menu_center'
+        if item == 'logo'
+          assign item_row = 'top'
+          assign item_column = 'left'
+        elsif item == 'menu'
+          assign item_row = 'top'
+          assign item_column = 'center'
+        endif
+      when 'logo_center_menu_left'
+        if item == 'logo'
+          assign item_row = 'top'
+          assign item_column = 'center'
+        elsif item == 'menu'
+          assign item_row = 'top'
+          assign item_column = 'left'
+        endif
+      when 'menu_below_logo'
+        if item == 'logo'
+          assign item_row = 'top'
+          assign item_column = 'left'
+        elsif item == 'menu'
+          assign item_row = 'bottom'
+          assign item_column = 'center'
+        endif
+    endcase
 
     case item
       when 'actions'

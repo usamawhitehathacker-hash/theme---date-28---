@@ -7,7 +7,6 @@
 {%- enddoc -%}
 
 {% liquid
-  assign block_settings = block.settings
   assign header_settings = section.settings
   assign header_menu = header_settings.menu
   assign header_menu_style = header_settings.menu_style
@@ -64,7 +63,6 @@
     {% endif %}
   {% else %}
     {% liquid
-      assign block_settings = block.settings
       assign menu_content_type = header_menu_style
       assign image_border_radius = header_image_border_radius
       assign color_scheme_classes = ''
@@ -128,111 +126,11 @@
               >
                 {% assign list_id = 'MegaMenuList-' | append: forloop.index %}
                 {% if is_premium_mega_menu and forloop.index <= premium_panel_slots %}
-                  {% case forloop.index %}
-                    {% when 1 %}
-                      {% content_for 'block',
-                        type: '_mega-menu-panel',
-                        id: 'premium-mega-panel-1',
-                        parent_link: link,
-                        list_id: list_id,
-                        menu_block_settings: block_settings %}
-                    {% when 2 %}
-                      {% content_for 'block',
-                        type: '_mega-menu-panel',
-                        id: 'premium-mega-panel-2',
-                        parent_link: link,
-                        list_id: list_id,
-                        menu_block_settings: block_settings %}
-                    {% when 3 %}
-                      {% content_for 'block',
-                        type: '_mega-menu-panel',
-                        id: 'premium-mega-panel-3',
-                        parent_link: link,
-                        list_id: list_id,
-                        menu_block_settings: block_settings %}
-                    {% when 4 %}
-                      {% content_for 'block',
-                        type: '_mega-menu-panel',
-                        id: 'premium-mega-panel-4',
-                        parent_link: link,
-                        list_id: list_id,
-                        menu_block_settings: block_settings %}
-                    {% when 5 %}
-                      {% content_for 'block',
-                        type: '_mega-menu-panel',
-                        id: 'premium-mega-panel-5',
-                        parent_link: link,
-                        list_id: list_id,
-                        menu_block_settings: block_settings %}
-                    {% when 6 %}
-                      {% content_for 'block',
-                        type: '_mega-menu-panel',
-                        id: 'premium-mega-panel-6',
-                        parent_link: link,
-                        list_id: list_id,
-                        menu_block_settings: block_settings %}
-                    {% when 7 %}
-                      {% content_for 'block',
-                        type: '_mega-menu-panel',
-                        id: 'premium-mega-panel-7',
-                        parent_link: link,
-                        list_id: list_id,
-                        menu_block_settings: block_settings %}
-                    {% when 8 %}
-                      {% content_for 'block',
-                        type: '_mega-menu-panel',
-                        id: 'premium-mega-panel-8',
-                        parent_link: link,
-                        list_id: list_id,
-                        menu_block_settings: block_settings %}
-                    {% when 9 %}
-                      {% content_for 'block',
-                        type: '_mega-menu-panel',
-                        id: 'premium-mega-panel-9',
-                        parent_link: link,
-                        list_id: list_id,
-                        menu_block_settings: block_settings %}
-                    {% when 10 %}
-                      {% content_for 'block',
-                        type: '_mega-menu-panel',
-                        id: 'premium-mega-panel-10',
-                        parent_link: link,
-                        list_id: list_id,
-                        menu_block_settings: block_settings %}
-                    {% when 11 %}
-                      {% content_for 'block',
-                        type: '_mega-menu-panel',
-                        id: 'premium-mega-panel-11',
-                        parent_link: link,
-                        list_id: list_id,
-                        menu_block_settings: block_settings %}
-                    {% when 12 %}
-                      {% content_for 'block',
-                        type: '_mega-menu-panel',
-                        id: 'premium-mega-panel-12',
-                        parent_link: link,
-                        list_id: list_id,
-                        menu_block_settings: block_settings %}
-                    {% else %}
-                      <div class="mega-menu section section--full-width-margin section--{{ section.settings.section_width }}">
-                        <div
-                          class="mega-menu__grid"
-                          data-menu-grid-id="{{ list_id }}"
-                        >
-                          {% render 'mega-menu-list',
-                            parent_link: link,
-                            id: list_id,
-                            section: section,
-                            grid_columns_count: 6,
-                            grid_columns_count_tablet: 4,
-                            grid_columns_count_collection_images: 8,
-                            menu_content_type: 'text',
-                            content_aspect_ratio: ratio,
-                            image_border_radius: image_border_radius
-                          %}
-                        </div>
-                      </div>
-                  {% endcase %}
+                  {% render 'premium-mega-menu-panel',
+                    parent_link: link,
+                    list_id: list_id,
+                    section: section
+                  %}
                 {% else %}
                   <div class="mega-menu section section--full-width-margin section--{{ section.settings.section_width }}">
                     <div

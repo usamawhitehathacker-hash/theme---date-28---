@@ -3,6 +3,9 @@
 {% liquid
   assign block_settings = block.settings
   assign use_inverse_logo = false
+  assign selected_logo = section.settings.header_logo | default: settings.logo
+  assign selected_logo_height = section.settings.header_logo_height_desktop | default: settings.logo_height
+  assign selected_logo_height_mobile = section.settings.header_logo_height_mobile | default: settings.logo_height_mobile
 
   if section.settings.enable_transparent_header_home and template.name == 'index' and section.settings.home_color_scheme == 'inverse'
     assign use_inverse_logo = true
@@ -13,10 +16,12 @@
   endif
 
   if use_inverse_logo
-    if settings.logo_inverse != blank
+    if section.settings.header_transparent_logo != blank
+      assign inverse_logo = section.settings.header_transparent_logo
+    elsif settings.logo_inverse != blank
       assign inverse_logo = settings.logo_inverse
     else
-      assign inverse_logo = settings.logo
+      assign inverse_logo = selected_logo
     endif
   endif
 
@@ -43,12 +48,12 @@
   {{ block.shopify_attributes }}
 >
   {% liquid
-    assign logo_width = settings.logo_height | times: settings.logo.aspect_ratio | ceil
-    assign logo_width_mobile = settings.logo_height_mobile | times: settings.logo.aspect_ratio | ceil
-    assign inverse_logo_width = settings.logo_height | times: inverse_logo.aspect_ratio | ceil
-    assign inverse_logo_width_mobile = settings.logo_height_mobile | times: inverse_logo.aspect_ratio | ceil
-    assign logo_style = '--header-logo-image-width: ' | append: logo_width | append: 'px;' | append: '--header-logo-image-width-mobile: ' | append: logo_width_mobile | append: 'px; --header-logo-image-height: ' | append: settings.logo_height | append: 'px; --header-logo-image-height-mobile: ' | append: settings.logo_height_mobile | append: 'px;'
-    assign inverse_logo_style = '--header-logo-image-width: ' | append: inverse_logo_width | append: 'px;' | append: '--header-logo-image-width-mobile: ' | append: inverse_logo_width_mobile | append: 'px; --header-logo-image-height: ' | append: settings.logo_height | append: 'px; --header-logo-image-height-mobile: ' | append: settings.logo_height_mobile | append: 'px;'
+    assign logo_width = selected_logo_height | times: selected_logo.aspect_ratio | ceil
+    assign logo_width_mobile = selected_logo_height_mobile | times: selected_logo.aspect_ratio | ceil
+    assign inverse_logo_width = selected_logo_height | times: inverse_logo.aspect_ratio | ceil
+    assign inverse_logo_width_mobile = selected_logo_height_mobile | times: inverse_logo.aspect_ratio | ceil
+    assign logo_style = '--header-logo-image-width: ' | append: logo_width | append: 'px;' | append: '--header-logo-image-width-mobile: ' | append: logo_width_mobile | append: 'px; --header-logo-image-height: ' | append: selected_logo_height | append: 'px; --header-logo-image-height-mobile: ' | append: selected_logo_height_mobile | append: 'px;'
+    assign inverse_logo_style = '--header-logo-image-width: ' | append: inverse_logo_width | append: 'px;' | append: '--header-logo-image-width-mobile: ' | append: inverse_logo_width_mobile | append: 'px; --header-logo-image-height: ' | append: selected_logo_height | append: 'px; --header-logo-image-height-mobile: ' | append: selected_logo_height_mobile | append: 'px;'
   %}
 
   <span
@@ -56,9 +61,9 @@
     data-testid="header-logo"
   >
     {% render 'image',
-      image: settings.logo,
+      image: selected_logo,
       class: 'header-logo__image',
-      height: settings.logo_height,
+      height: selected_logo_height,
       alt_text_fallback: alt_text_fallback,
       text_fallback: shop.name,
       style: logo_style
@@ -73,7 +78,7 @@
       {% render 'image',
         image: inverse_logo,
         class: 'header-logo__image',
-        height: settings.logo_height,
+        height: selected_logo_height,
         alt_text_fallback: alt_text_fallback,
         text_fallback: shop.name,
         style: inverse_logo_style
