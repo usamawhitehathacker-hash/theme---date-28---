@@ -1196,6 +1196,183 @@
     },
     {
       "type": "header",
+      "content": "t:content.premium_mega_menu"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:content.enable_premium_mega_menu_in_menu_block"
+    },
+    {
+      "type": "select",
+      "id": "premium_panel_width",
+      "label": "t:settings.panel_width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "premium_layout",
+      "label": "t:settings.layout",
+      "options": [
+        {
+          "value": "links_only",
+          "label": "t:options.links_only"
+        },
+        {
+          "value": "right_rail",
+          "label": "t:options.right_content"
+        },
+        {
+          "value": "left_rail",
+          "label": "t:options.left_content"
+        },
+        {
+          "value": "bottom_row",
+          "label": "t:options.bottom_content"
+        }
+      ],
+      "default": "right_rail"
+    },
+    {
+      "type": "range",
+      "id": "premium_panel_slots",
+      "label": "t:settings.panel_slots",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "premium_columns_desktop",
+      "label": "t:settings.desktop_columns",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "premium_columns_tablet",
+      "label": "t:settings.tablet_columns",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "premium_content_width",
+      "label": "t:settings.content_width",
+      "min": 20,
+      "max": 45,
+      "step": 1,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "premium_panel_padding",
+      "label": "t:settings.panel_padding",
+      "min": 16,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "premium_column_gap",
+      "label": "t:settings.column_gap",
+      "min": 12,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "select",
+      "id": "premium_image_ratio",
+      "label": "t:settings.image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:options.auto"
+        },
+        {
+          "value": "4 / 5",
+          "label": "t:options.portrait"
+        },
+        {
+          "value": "1 / 1",
+          "label": "t:options.square"
+        },
+        {
+          "value": "16 / 9",
+          "label": "t:options.landscape"
+        }
+      ],
+      "default": "4 / 5"
+    },
+    {
+      "type": "range",
+      "id": "premium_card_radius",
+      "label": "t:settings.card_corner_radius",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "premium_show_parent_link",
+      "label": "t:settings.show_parent_link",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "premium_show_view_all",
+      "label": "t:settings.show_view_all_link",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "premium_animation",
+      "label": "t:settings.animation",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.none"
+        },
+        {
+          "value": "fade",
+          "label": "t:options.fade"
+        },
+        {
+          "value": "slide",
+          "label": "t:options.slide"
+        }
+      ],
+      "default": "fade"
+    },
+    {
+      "type": "checkbox",
+      "id": "premium_mobile_collection_images",
+      "label": "t:settings.mobile_collection_images",
+      "default": true
+    },
+    {
+      "type": "header",
       "content": "t:content.customer_account"
     },
     {

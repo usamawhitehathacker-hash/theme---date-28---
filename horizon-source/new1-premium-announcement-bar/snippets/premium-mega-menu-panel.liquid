@@ -13,63 +13,69 @@
   assign panel_settings = panel_block.settings
   assign panel_width = panel_settings.panel_width | default: 'inherit'
   if panel_width == 'inherit'
-    assign panel_width = menu_block_settings.premium_panel_width | default: section.settings.section_width
+    assign panel_width = section.settings.premium_panel_width | default: menu_block_settings.premium_panel_width | default: section.settings.section_width
   endif
 
   assign panel_layout = panel_settings.layout | default: 'inherit'
   if panel_layout == 'inherit'
-    assign panel_layout = menu_block_settings.premium_layout | default: 'right_rail'
+    assign panel_layout = section.settings.premium_layout | default: menu_block_settings.premium_layout | default: 'right_rail'
   endif
 
   assign panel_columns_desktop = panel_settings.columns_desktop | default: 'inherit'
   if panel_columns_desktop == 'inherit'
-    assign panel_columns_desktop = menu_block_settings.premium_columns_desktop | default: 4
+    assign panel_columns_desktop = section.settings.premium_columns_desktop | default: menu_block_settings.premium_columns_desktop | default: 4
   endif
   assign panel_columns_desktop = panel_columns_desktop | plus: 0
   assign panel_columns_tablet = panel_settings.columns_tablet | default: 'inherit'
   if panel_columns_tablet == 'inherit'
-    assign panel_columns_tablet = menu_block_settings.premium_columns_tablet | default: 3
+    assign panel_columns_tablet = section.settings.premium_columns_tablet | default: menu_block_settings.premium_columns_tablet | default: 3
   endif
   assign panel_columns_tablet = panel_columns_tablet | plus: 0
 
   assign panel_content_width = panel_settings.content_width
   if panel_content_width == 0 or panel_content_width == blank
-    assign panel_content_width = menu_block_settings.premium_content_width | default: 30
+    assign panel_content_width = section.settings.premium_content_width | default: menu_block_settings.premium_content_width | default: 30
   endif
 
   assign panel_padding = panel_settings.panel_padding
   if panel_padding == 0 or panel_padding == blank
-    assign panel_padding = menu_block_settings.premium_panel_padding | default: 32
+    assign panel_padding = section.settings.premium_panel_padding | default: menu_block_settings.premium_panel_padding | default: 32
   endif
 
   assign panel_gap = panel_settings.column_gap
   if panel_gap == 0 or panel_gap == blank
-    assign panel_gap = menu_block_settings.premium_column_gap | default: 28
+    assign panel_gap = section.settings.premium_column_gap | default: menu_block_settings.premium_column_gap | default: 28
   endif
 
   assign panel_card_radius = panel_settings.card_radius
   if panel_card_radius == blank
-    assign panel_card_radius = menu_block_settings.premium_card_radius | default: menu_block_settings.image_border_radius | default: 0
+    assign panel_card_radius = section.settings.premium_card_radius | default: menu_block_settings.premium_card_radius | default: menu_block_settings.image_border_radius | default: 0
   endif
 
   assign panel_image_ratio = panel_settings.image_ratio | default: 'inherit'
   if panel_image_ratio == 'inherit'
-    assign panel_image_ratio = menu_block_settings.premium_image_ratio | default: '4 / 5'
+    assign panel_image_ratio = section.settings.premium_image_ratio | default: menu_block_settings.premium_image_ratio | default: '4 / 5'
   endif
 
   assign panel_animation = panel_settings.animation | default: 'inherit'
   if panel_animation == 'inherit'
-    assign panel_animation = menu_block_settings.premium_animation | default: 'fade'
+    assign panel_animation = section.settings.premium_animation | default: menu_block_settings.premium_animation | default: 'fade'
   endif
 
-  assign show_parent_link = menu_block_settings.premium_show_parent_link
+  assign show_parent_link = section.settings.premium_show_parent_link
+  if show_parent_link == blank
+    assign show_parent_link = menu_block_settings.premium_show_parent_link
+  endif
   if panel_settings.show_parent_link == 'show'
     assign show_parent_link = true
   elsif panel_settings.show_parent_link == 'hide'
     assign show_parent_link = false
   endif
 
-  assign show_view_all = menu_block_settings.premium_show_view_all
+  assign show_view_all = section.settings.premium_show_view_all
+  if show_view_all == blank
+    assign show_view_all = menu_block_settings.premium_show_view_all
+  endif
   if panel_settings.show_view_all == 'show'
     assign show_view_all = true
   elsif panel_settings.show_view_all == 'hide'

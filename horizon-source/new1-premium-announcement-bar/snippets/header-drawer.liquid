@@ -17,7 +17,12 @@
   assign image_border_radius = block_settings.image_border_radius
   assign drawer_menu_style = block_settings.menu_style
 
-  if drawer_menu_style == 'premium_mega' and block_settings.premium_mobile_collection_images
+  assign premium_mobile_collection_images = section.settings.premium_mobile_collection_images
+  if premium_mobile_collection_images == blank
+    assign premium_mobile_collection_images = block_settings.premium_mobile_collection_images
+  endif
+
+  if drawer_menu_style == 'premium_mega' and premium_mobile_collection_images
     assign drawer_menu_style = 'collection_images'
   endif
 

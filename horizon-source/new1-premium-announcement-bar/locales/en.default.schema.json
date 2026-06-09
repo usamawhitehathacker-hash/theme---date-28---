@@ -97,6 +97,7 @@
     // Section header for navigation menu settings in theme editor
     "menu": "Menu",
     "premium_mega_menu": "Premium mega menu",
+    "enable_premium_mega_menu_in_menu_block": "Set the header menu block media type to Premium mega menu, then control the premium panel behavior here.",
     "mobile_column_optimization": "Columns will automatically optimize for mobile",
     "mobile_layout": "Mobile layout",
     "mobile_size": "Mobile size",

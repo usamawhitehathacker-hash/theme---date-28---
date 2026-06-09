@@ -78,8 +78,8 @@
 
       if block_settings.menu_style == 'premium_mega'
         assign is_premium_mega_menu = true
-        assign ratio = block_settings.premium_image_ratio
-        assign premium_panel_slots = block_settings.premium_panel_slots | default: 3
+        assign ratio = section.settings.premium_image_ratio | default: block_settings.premium_image_ratio
+        assign premium_panel_slots = section.settings.premium_panel_slots | default: block_settings.premium_panel_slots | default: 3
       elsif block_settings.menu_style == 'featured_collections'
         assign ratio = block_settings.featured_collections_aspect_ratio
       elsif block_settings.menu_style == 'featured_products'
