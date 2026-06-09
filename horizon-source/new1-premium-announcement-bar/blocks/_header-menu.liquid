@@ -79,6 +79,7 @@
       if block_settings.menu_style == 'premium_mega'
         assign is_premium_mega_menu = true
         assign ratio = block_settings.premium_image_ratio
+        assign premium_panel_slots = block_settings.premium_panel_slots | default: 3
       elsif block_settings.menu_style == 'featured_collections'
         assign ratio = block_settings.featured_collections_aspect_ratio
       elsif block_settings.menu_style == 'featured_products'
@@ -120,7 +121,7 @@
                 style="{% render 'submenu-font-styles', settings: block_settings %}"
               >
                 {% assign list_id = 'MegaMenuList-' | append: forloop.index %}
-                {% if is_premium_mega_menu %}
+                {% if is_premium_mega_menu and forloop.index <= premium_panel_slots %}
                   {% case forloop.index %}
                     {% when 1 %}
                       {% content_for 'block',
@@ -1039,6 +1040,16 @@
         }
       ],
       "default": "right_rail",
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
+    },
+    {
+      "type": "range",
+      "id": "premium_panel_slots",
+      "label": "t:settings.panel_slots",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 3,
       "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
     },
     {
