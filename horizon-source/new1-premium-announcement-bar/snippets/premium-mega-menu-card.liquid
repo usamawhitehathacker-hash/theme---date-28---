@@ -1,0 +1,252 @@
+{%- doc -%}
+  Renders premium mega menu content cards.
+
+  @param {object} block - Theme block object.
+  @param {string} card_type - promo, badge, product, or collection.
+  @param {object} [image] - Image picker object for promo cards.
+  @param {string} [heading] - Card heading.
+  @param {string} [text] - Card supporting text.
+  @param {string} [link] - Optional card URL.
+  @param {string} [button_label] - Optional CTA label.
+  @param {string} [badge] - Optional badge text.
+  @param {object} [resource] - Product or collection object.
+  @param {string} [resource_type] - product or collection.
+  @param {boolean} [show_price] - Show product price.
+  @param {boolean} [show_vendor] - Show product vendor.
+  @param {string} [style] - default, overlay, compact, or chip.
+{%- enddoc -%}
+
+{% liquid
+  assign card_style = style | default: 'default'
+  assign has_content = false
+  assign image_alt = image.alt | default: heading | default: ''
+
+  if card_type == 'product' and resource != blank
+    assign has_content = true
+  elsif card_type == 'collection' and resource != blank
+    assign has_content = true
+  elsif heading != blank or text != blank or badge != blank or image != blank
+    assign has_content = true
+  elsif request.design_mode
+    assign has_content = true
+  endif
+%}
+
+{% if has_content %}
+  <div
+    class="premium-mega-card premium-mega-card--{{ card_type }} premium-mega-card--{{ card_style }}"
+    {{ block.shopify_attributes }}
+  >
+    {% if card_type == 'product' or card_type == 'collection' %}
+      {% if resource != blank %}
+        {% if card_type == 'product' %}
+          {% assign product_image = resource.featured_media.preview_image | default: resource.featured_image %}
+          <a class="premium-mega-card__link" href="{{ resource.url }}" aria-label="{{ resource.title | escape }}"></a>
+          <div class="premium-mega-card__media">
+            {% if product_image != blank %}
+              {{
+                product_image
+                | image_url: width: 900
+                | image_tag:
+                  loading: 'lazy',
+                  class: 'premium-mega-card__image',
+                  widths: '240, 360, 540, 720, 900',
+                  sizes: '(min-width: 990px) 18vw, 50vw',
+                  alt: resource.title
+              }}
+            {% else %}
+              <div class="premium-mega-card__placeholder">{{ resource.title }}</div>
+            {% endif %}
+          </div>
+          <div class="premium-mega-card__content">
+            <p class="premium-mega-card__heading">{{ resource.title }}</p>
+            {% if show_vendor and resource.vendor != blank %}
+              <p class="premium-mega-card__vendor">{{ resource.vendor }}</p>
+            {% endif %}
+            {% if show_price %}
+              {% render 'price', product_resource: resource, show_unit_price: true %}
+            {% endif %}
+          </div>
+        {% else %}
+          {% render 'resource-card',
+            resource: resource,
+            resource_type: resource_type,
+            image_hover: true,
+            image_aspect_ratio: '4 / 5',
+            image_sizes: '(min-width: 990px) 18vw, 50vw'
+          %}
+        {% endif %}
+      {% elsif request.design_mode %}
+        <div class="premium-mega-card__placeholder">
+          {{ 'content.product_card_placeholder' | t }}
+        </div>
+      {% endif %}
+    {% else %}
+      {% if link != blank %}
+        <a class="premium-mega-card__link" href="{{ link }}" aria-label="{{ heading | default: badge | escape }}"></a>
+      {% endif %}
+
+      {% if image != blank %}
+        <div class="premium-mega-card__media">
+          {{
+            image
+            | image_url: width: 900
+            | image_tag:
+              loading: 'lazy',
+              class: 'premium-mega-card__image',
+              widths: '240, 360, 540, 720, 900',
+              sizes: '(min-width: 990px) 18vw, 50vw',
+              alt: image_alt
+          }}
+        </div>
+      {% endif %}
+
+      <div class="premium-mega-card__content">
+        {% if badge != blank %}
+          <span class="premium-mega-card__badge">{{ badge }}</span>
+        {% endif %}
+        {% if heading != blank %}
+          <p class="premium-mega-card__heading">{{ heading }}</p>
+        {% elsif request.design_mode and card_type == 'promo' %}
+          <p class="premium-mega-card__heading">Promo card</p>
+        {% endif %}
+        {% if text != blank %}
+          <p class="premium-mega-card__text">{{ text }}</p>
+        {% endif %}
+        {% if button_label != blank %}
+          <span class="premium-mega-card__button">{{ button_label }}</span>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .premium-mega-card {
+    position: relative;
+    display: grid;
+    gap: var(--padding-xs);
+    min-width: 0;
+    color: var(--color-foreground);
+  }
+
+  .premium-mega-card__link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: var(--premium-mega-card-radius);
+  }
+
+  .premium-mega-card__media {
+    overflow: hidden;
+    aspect-ratio: var(--premium-mega-image-ratio, 4 / 5);
+    border-radius: var(--premium-mega-card-radius);
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-5));
+  }
+
+  .premium-mega-card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--animation-speed-medium) var(--animation-timing-hover);
+  }
+
+  .premium-mega-card:has(.premium-mega-card__link:hover) .premium-mega-card__image,
+  .premium-mega-card:has(.premium-mega-card__link:focus-visible) .premium-mega-card__image {
+    transform: scale(1.035);
+  }
+
+  .premium-mega-card__content {
+    display: grid;
+    gap: var(--padding-3xs);
+    min-width: 0;
+  }
+
+  .premium-mega-card__badge {
+    display: inline-flex;
+    width: fit-content;
+    padding: 0.25rem 0.5rem;
+    border-radius: 999px;
+    background: rgb(var(--color-foreground-rgb) / var(--opacity-10));
+    color: var(--color-foreground);
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .premium-mega-card__heading,
+  .premium-mega-card__text,
+  .premium-mega-card__vendor {
+    margin: 0;
+  }
+
+  .premium-mega-card__heading {
+    font-weight: 600;
+    line-height: var(--line-height--body-tight);
+  }
+
+  .premium-mega-card__text,
+  .premium-mega-card__vendor {
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+    font-size: var(--font-size--sm);
+    line-height: var(--line-height--body-normal);
+  }
+
+  .premium-mega-card__button {
+    display: inline-flex;
+    width: fit-content;
+    margin-block-start: var(--padding-3xs);
+    font-size: var(--font-size--sm);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .premium-mega-card--overlay {
+    overflow: hidden;
+    border-radius: var(--premium-mega-card-radius);
+  }
+
+  .premium-mega-card--overlay .premium-mega-card__content {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: 2;
+    padding: var(--padding-sm);
+    color: white;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.62), transparent);
+    pointer-events: none;
+  }
+
+  .premium-mega-card--overlay .premium-mega-card__text {
+    color: rgb(255 255 255 / 0.82);
+  }
+
+  .premium-mega-card--compact {
+    grid-template-columns: 72px minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .premium-mega-card--compact .premium-mega-card__media {
+    aspect-ratio: 1;
+  }
+
+  .premium-mega-card--chip {
+    width: fit-content;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-10));
+    border-radius: 999px;
+  }
+
+  .premium-mega-card__placeholder {
+    min-height: 96px;
+    display: grid;
+    place-items: center;
+    padding: var(--padding-sm);
+    border: 1px dashed rgb(var(--color-foreground-rgb) / var(--opacity-20));
+    border-radius: var(--premium-mega-card-radius);
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+    text-align: center;
+  }
+{% endstylesheet %}

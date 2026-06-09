@@ -15,10 +15,15 @@
   assign block_settings = block.settings
   assign max_featured_items = 4
   assign image_border_radius = block_settings.image_border_radius
+  assign drawer_menu_style = block_settings.menu_style
 
-  if block_settings.menu_style == 'featured_collections'
+  if drawer_menu_style == 'premium_mega' and block_settings.premium_mobile_collection_images
+    assign drawer_menu_style = 'collection_images'
+  endif
+
+  if drawer_menu_style == 'featured_collections'
     assign ratio = block_settings.featured_collections_aspect_ratio
-  elsif block_settings.menu_style == 'featured_products'
+  elsif drawer_menu_style == 'featured_products'
     assign ratio = block_settings.featured_products_aspect_ratio
   endif
 
@@ -133,7 +138,7 @@
                       </summary>
                       {% liquid
                         assign render_link_image = false
-                        if block_settings.menu_style == 'collection_images'
+                        if drawer_menu_style == 'collection_images'
                           assign catalog_links = link.links | where: 'type', 'catalog_link'
                           assign collection_list_links = link.links | where: 'type', 'collections_link'
                           assign collection_links = link.links | where: 'type', 'collection_link'
@@ -194,7 +199,7 @@
                   </a>
                   {% liquid
                     assign render_link_image = false
-                    if block_settings.menu_style == 'collection_images'
+                    if drawer_menu_style == 'collection_images'
                       assign catalog_links = link.links | where: 'type', 'catalog_link'
                       assign collection_list_links = link.links | where: 'type', 'collections_link'
                       assign collection_links = link.links | where: 'type', 'collection_link'
@@ -309,7 +314,7 @@
                         </div>
                         {% liquid
                           assign render_link_image = false
-                          if block_settings.menu_style == 'collection_images'
+                          if drawer_menu_style == 'collection_images'
                             assign catalog_links = link.links | where: 'type', 'catalog_link'
                             assign collection_list_links = link.links | where: 'type', 'collections_link'
                             assign collection_links = link.links | where: 'type', 'collection_link'
@@ -387,7 +392,7 @@
                                       </summary>
                                       {% liquid
                                         assign render_link_image = false
-                                        if block_settings.menu_style == 'collection_images'
+                                        if drawer_menu_style == 'collection_images'
                                           assign catalog_links = childlink.links | where: 'type', 'catalog_link'
                                           assign collection_list_links = childlink.links | where: 'type', 'collections_link'
                                           assign collection_links = childlink.links | where: 'type', 'collection_link'
@@ -452,7 +457,7 @@
                                   </a>
                                   {% liquid
                                     assign render_link_image = false
-                                    if block_settings.menu_style == 'collection_images'
+                                    if drawer_menu_style == 'collection_images'
                                       assign catalog_links = childlink.links | where: 'type', 'catalog_link'
                                       assign collection_list_links = childlink.links | where: 'type', 'collections_link'
                                       assign collection_links = childlink.links | where: 'type', 'collection_link'
@@ -500,11 +505,11 @@
                         </ul>
                         {% liquid
                           if eager_loading
-                            if block_settings.menu_style == 'featured_collections'
+                            if drawer_menu_style == 'featured_collections'
                               assign featured_collections = link.links | where: 'type', 'collection_link'
                             endif
 
-                            if block_settings.menu_style == 'featured_products'
+                            if drawer_menu_style == 'featured_products'
                               assign collection_linklist = link.links | where: 'type', 'collection_link' | first
                               assign featured_products_collection = collection_linklist.object
                             endif
@@ -704,11 +709,11 @@
       </div>
 
       {% liquid
-        if block_settings.menu_style == 'featured_collections'
+        if drawer_menu_style == 'featured_collections'
           assign top_level_featured_collections = linklist.links | where: 'type', 'collection_link'
         endif
 
-        if eager_loading and block_settings.menu_style == 'featured_products'
+        if eager_loading and drawer_menu_style == 'featured_products'
           for link in linklist.links
             if link.type == 'collection_link'
               assign collection_linklist = link

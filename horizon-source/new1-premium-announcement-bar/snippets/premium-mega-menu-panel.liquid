@@ -1,0 +1,238 @@
+{%- doc -%}
+  Renders a premium mega menu panel with navigation columns and optional merchant-controlled content.
+
+  @param {object} parent_link - Top-level navigation link for this panel.
+  @param {string} list_id - Unique list ID for menu markup.
+  @param {object} section - Header section object.
+  @param {object} menu_block_settings - Parent header menu block settings.
+  @param {object} panel_block - Static panel block.
+  @param {string} children - Nested premium blocks rendered by the panel block.
+{%- enddoc -%}
+
+{% liquid
+  assign panel_settings = panel_block.settings
+  assign panel_width = menu_block_settings.premium_panel_width | default: section.settings.section_width
+  assign panel_layout = panel_settings.layout | default: 'inherit'
+  if panel_layout == 'inherit'
+    assign panel_layout = menu_block_settings.premium_layout | default: 'right_rail'
+  endif
+
+  assign panel_columns_desktop = panel_settings.columns_desktop | default: 'inherit'
+  if panel_columns_desktop == 'inherit'
+    assign panel_columns_desktop = menu_block_settings.premium_columns_desktop | default: 4
+  endif
+  assign panel_columns_desktop = panel_columns_desktop | plus: 0
+  assign panel_columns_tablet = menu_block_settings.premium_columns_tablet | default: 3
+  assign panel_content_width = menu_block_settings.premium_content_width | default: 30
+  assign panel_padding = menu_block_settings.premium_panel_padding | default: 32
+  assign panel_gap = menu_block_settings.premium_column_gap | default: 28
+  assign panel_card_radius = menu_block_settings.premium_card_radius | default: menu_block_settings.image_border_radius | default: 0
+  assign panel_image_ratio = menu_block_settings.premium_image_ratio | default: '4 / 5'
+  assign panel_animation = menu_block_settings.premium_animation | default: 'fade'
+  assign trimmed_children = children | strip
+  assign has_premium_content = false
+
+  if trimmed_children != blank and panel_settings.hide_content == false and panel_layout != 'links_only'
+    assign has_premium_content = true
+  endif
+
+  if has_premium_content == false
+    assign panel_layout = 'links_only'
+  endif
+%}
+
+<div class="mega-menu premium-mega-menu section section--full-width-margin section--{{ panel_width }}">
+  <div
+    class="premium-mega-menu__panel premium-mega-menu__panel--{{ panel_layout }} premium-mega-menu__panel--{{ panel_animation }}"
+    style="
+      --premium-mega-panel-padding: {{ panel_padding }}px;
+      --premium-mega-gap: {{ panel_gap }}px;
+      --premium-mega-content-width: {{ panel_content_width }}%;
+      --premium-mega-card-radius: {{ panel_card_radius }}px;
+      --premium-mega-image-ratio: {{ panel_image_ratio }};
+    "
+    {{ panel_block.shopify_attributes }}
+  >
+    {% if panel_settings.heading != blank or panel_settings.intro != blank %}
+      <div class="premium-mega-menu__header">
+        {% if panel_settings.heading != blank %}
+          <p class="premium-mega-menu__heading">{{ panel_settings.heading }}</p>
+        {% endif %}
+        {% if panel_settings.intro != blank %}
+          <p class="premium-mega-menu__intro">{{ panel_settings.intro }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="premium-mega-menu__body">
+      {% if panel_layout == 'left_rail' %}
+        <div class="premium-mega-menu__content">
+          {{ children }}
+        </div>
+      {% endif %}
+
+      <div class="premium-mega-menu__navigation">
+        {% if menu_block_settings.premium_show_parent_link %}
+          <a class="premium-mega-menu__parent-link" href="{{ parent_link.url }}">
+            {{- parent_link.title -}}
+          </a>
+        {% endif %}
+
+        <div
+          class="mega-menu__grid premium-mega-menu__grid"
+          data-menu-grid-id="{{ list_id }}"
+        >
+          {% render 'mega-menu-list',
+            parent_link: parent_link,
+            id: list_id,
+            section: section,
+            grid_columns_count: panel_columns_desktop,
+            grid_columns_count_tablet: panel_columns_tablet,
+            grid_columns_count_collection_images: 8,
+            menu_content_type: 'text',
+            content_aspect_ratio: panel_image_ratio,
+            image_border_radius: panel_card_radius
+          %}
+        </div>
+
+        {% if menu_block_settings.premium_show_view_all and parent_link.url != blank %}
+          <a class="premium-mega-menu__view-all" href="{{ parent_link.url }}">
+            {{ 'actions.view_all' | t }} {{ parent_link.title }}
+          </a>
+        {% endif %}
+      </div>
+
+      {% if panel_layout == 'right_rail' or panel_layout == 'bottom_row' %}
+        <div class="premium-mega-menu__content">
+          {{ children }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .premium-mega-menu__panel {
+    width: 100%;
+    padding: var(--premium-mega-panel-padding);
+  }
+
+  .premium-mega-menu__panel--fade {
+    animation: fadeIn var(--animation-speed-medium) var(--animation-timing-fade-in) both;
+  }
+
+  .premium-mega-menu__panel--slide {
+    animation: premiumMegaSlideIn var(--animation-speed-medium) var(--animation-timing-default) both;
+  }
+
+  .premium-mega-menu__header {
+    display: grid;
+    gap: var(--padding-2xs);
+    margin-block-end: var(--premium-mega-gap);
+    max-width: 56ch;
+  }
+
+  .premium-mega-menu__heading {
+    margin: 0;
+    color: var(--color-foreground);
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.125rem, 1rem + 0.4vw, 1.5rem);
+    line-height: var(--line-height--heading-tight);
+  }
+
+  .premium-mega-menu__intro {
+    margin: 0;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+    font-size: var(--font-size--sm);
+    line-height: var(--line-height--body-normal);
+  }
+
+  .premium-mega-menu__body {
+    display: grid;
+    gap: var(--premium-mega-gap);
+    align-items: start;
+  }
+
+  .premium-mega-menu__panel--right_rail .premium-mega-menu__body {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, var(--premium-mega-content-width));
+  }
+
+  .premium-mega-menu__panel--left_rail .premium-mega-menu__body {
+    grid-template-columns: minmax(220px, var(--premium-mega-content-width)) minmax(0, 1fr);
+  }
+
+  .premium-mega-menu__navigation {
+    min-width: 0;
+  }
+
+  .premium-mega-menu__parent-link,
+  .premium-mega-menu__view-all {
+    display: inline-flex;
+    width: fit-content;
+    color: var(--color-foreground);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .premium-mega-menu__parent-link {
+    margin-block-end: var(--padding-sm);
+  }
+
+  .premium-mega-menu__view-all {
+    margin-block-start: var(--padding-md);
+    font-size: var(--font-size--sm);
+  }
+
+  .premium-mega-menu__parent-link:hover,
+  .premium-mega-menu__view-all:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .premium-mega-menu__content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+    gap: var(--padding-sm);
+    min-width: 0;
+    --resource-card-corner-radius: var(--premium-mega-card-radius);
+  }
+
+  .premium-mega-menu__panel--bottom_row .premium-mega-menu__content {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+
+  .premium-mega-menu__panel--links_only {
+    padding-inline: max(var(--premium-mega-panel-padding), var(--padding-xl));
+  }
+
+  .premium-mega-menu__grid {
+    min-width: 0;
+  }
+
+  @media screen and (max-width: 989px) {
+    .premium-mega-menu__panel {
+      padding: var(--padding-lg);
+    }
+
+    .premium-mega-menu__panel--right_rail .premium-mega-menu__body,
+    .premium-mega-menu__panel--left_rail .premium-mega-menu__body {
+      grid-template-columns: 1fr;
+    }
+
+    .premium-mega-menu__panel--left_rail .premium-mega-menu__content {
+      order: 2;
+    }
+  }
+
+  @keyframes premiumMegaSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+{% endstylesheet %}

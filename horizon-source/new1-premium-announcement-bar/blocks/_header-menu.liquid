@@ -65,6 +65,7 @@
       assign color_scheme_setting_id = 'color_scheme_' | append: section.settings.menu_row
       assign current_color_scheme = block_settings.color_scheme
       assign parent_color_scheme = section.settings[color_scheme_setting_id]
+      assign is_premium_mega_menu = false
 
       if parent_color_scheme.id != current_color_scheme.id
         assign color_scheme_classes = ' color-' | append: current_color_scheme
@@ -75,7 +76,10 @@
         assign color_scheme_classes = color_scheme_classes | append: ' color-scheme-matches-parent'
       endif
 
-      if block_settings.menu_style == 'featured_collections'
+      if block_settings.menu_style == 'premium_mega'
+        assign is_premium_mega_menu = true
+        assign ratio = block_settings.premium_image_ratio
+      elsif block_settings.menu_style == 'featured_collections'
         assign ratio = block_settings.featured_collections_aspect_ratio
       elsif block_settings.menu_style == 'featured_products'
         assign ratio = block_settings.featured_products_aspect_ratio
@@ -116,24 +120,132 @@
                 style="{% render 'submenu-font-styles', settings: block_settings %}"
               >
                 {% assign list_id = 'MegaMenuList-' | append: forloop.index %}
-                <div class="mega-menu section section--full-width-margin section--{{ section.settings.section_width }}">
-                  <div
-                    class="mega-menu__grid"
-                    data-menu-grid-id="{{ list_id }}"
-                  >
-                    {% render 'mega-menu-list',
-                      parent_link: link,
-                      id: list_id,
-                      section: section,
-                      grid_columns_count: 6,
-                      grid_columns_count_tablet: 4,
-                      grid_columns_count_collection_images: 8,
-                      menu_content_type: menu_content_type,
-                      content_aspect_ratio: ratio,
-                      image_border_radius: image_border_radius
-                    %}
+                {% if is_premium_mega_menu %}
+                  {% case forloop.index %}
+                    {% when 1 %}
+                      {% content_for 'block',
+                        type: '_mega-menu-panel',
+                        id: 'premium-mega-panel-1',
+                        parent_link: link,
+                        list_id: list_id,
+                        menu_block_settings: block_settings %}
+                    {% when 2 %}
+                      {% content_for 'block',
+                        type: '_mega-menu-panel',
+                        id: 'premium-mega-panel-2',
+                        parent_link: link,
+                        list_id: list_id,
+                        menu_block_settings: block_settings %}
+                    {% when 3 %}
+                      {% content_for 'block',
+                        type: '_mega-menu-panel',
+                        id: 'premium-mega-panel-3',
+                        parent_link: link,
+                        list_id: list_id,
+                        menu_block_settings: block_settings %}
+                    {% when 4 %}
+                      {% content_for 'block',
+                        type: '_mega-menu-panel',
+                        id: 'premium-mega-panel-4',
+                        parent_link: link,
+                        list_id: list_id,
+                        menu_block_settings: block_settings %}
+                    {% when 5 %}
+                      {% content_for 'block',
+                        type: '_mega-menu-panel',
+                        id: 'premium-mega-panel-5',
+                        parent_link: link,
+                        list_id: list_id,
+                        menu_block_settings: block_settings %}
+                    {% when 6 %}
+                      {% content_for 'block',
+                        type: '_mega-menu-panel',
+                        id: 'premium-mega-panel-6',
+                        parent_link: link,
+                        list_id: list_id,
+                        menu_block_settings: block_settings %}
+                    {% when 7 %}
+                      {% content_for 'block',
+                        type: '_mega-menu-panel',
+                        id: 'premium-mega-panel-7',
+                        parent_link: link,
+                        list_id: list_id,
+                        menu_block_settings: block_settings %}
+                    {% when 8 %}
+                      {% content_for 'block',
+                        type: '_mega-menu-panel',
+                        id: 'premium-mega-panel-8',
+                        parent_link: link,
+                        list_id: list_id,
+                        menu_block_settings: block_settings %}
+                    {% when 9 %}
+                      {% content_for 'block',
+                        type: '_mega-menu-panel',
+                        id: 'premium-mega-panel-9',
+                        parent_link: link,
+                        list_id: list_id,
+                        menu_block_settings: block_settings %}
+                    {% when 10 %}
+                      {% content_for 'block',
+                        type: '_mega-menu-panel',
+                        id: 'premium-mega-panel-10',
+                        parent_link: link,
+                        list_id: list_id,
+                        menu_block_settings: block_settings %}
+                    {% when 11 %}
+                      {% content_for 'block',
+                        type: '_mega-menu-panel',
+                        id: 'premium-mega-panel-11',
+                        parent_link: link,
+                        list_id: list_id,
+                        menu_block_settings: block_settings %}
+                    {% when 12 %}
+                      {% content_for 'block',
+                        type: '_mega-menu-panel',
+                        id: 'premium-mega-panel-12',
+                        parent_link: link,
+                        list_id: list_id,
+                        menu_block_settings: block_settings %}
+                    {% else %}
+                      <div class="mega-menu section section--full-width-margin section--{{ section.settings.section_width }}">
+                        <div
+                          class="mega-menu__grid"
+                          data-menu-grid-id="{{ list_id }}"
+                        >
+                          {% render 'mega-menu-list',
+                            parent_link: link,
+                            id: list_id,
+                            section: section,
+                            grid_columns_count: 6,
+                            grid_columns_count_tablet: 4,
+                            grid_columns_count_collection_images: 8,
+                            menu_content_type: 'text',
+                            content_aspect_ratio: ratio,
+                            image_border_radius: image_border_radius
+                          %}
+                        </div>
+                      </div>
+                  {% endcase %}
+                {% else %}
+                  <div class="mega-menu section section--full-width-margin section--{{ section.settings.section_width }}">
+                    <div
+                      class="mega-menu__grid"
+                      data-menu-grid-id="{{ list_id }}"
+                    >
+                      {% render 'mega-menu-list',
+                        parent_link: link,
+                        id: list_id,
+                        section: section,
+                        grid_columns_count: 6,
+                        grid_columns_count_tablet: 4,
+                        grid_columns_count_collection_images: 8,
+                        menu_content_type: menu_content_type,
+                        content_aspect_ratio: ratio,
+                        image_border_radius: image_border_radius
+                      %}
+                    </div>
                   </div>
-                </div>
+                {% endif %}
               </div>
             </div>
           {%- endif -%}
@@ -821,6 +933,10 @@
         {
           "value": "featured_collections",
           "label": "t:options.featured_collections"
+        },
+        {
+          "value": "premium_mega",
+          "label": "t:options.premium_mega_menu"
         }
       ],
       "default": "collection_images"
@@ -877,6 +993,184 @@
       "unit": "px",
       "default": 0,
       "visible_if": "{{ block.settings.menu_style != 'text' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.premium_mega_menu",
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
+    },
+    {
+      "type": "select",
+      "id": "premium_panel_width",
+      "label": "t:settings.panel_width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width",
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
+    },
+    {
+      "type": "select",
+      "id": "premium_layout",
+      "label": "t:settings.layout",
+      "options": [
+        {
+          "value": "links_only",
+          "label": "t:options.links_only"
+        },
+        {
+          "value": "right_rail",
+          "label": "t:options.right_content"
+        },
+        {
+          "value": "left_rail",
+          "label": "t:options.left_content"
+        },
+        {
+          "value": "bottom_row",
+          "label": "t:options.bottom_content"
+        }
+      ],
+      "default": "right_rail",
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
+    },
+    {
+      "type": "range",
+      "id": "premium_columns_desktop",
+      "label": "t:settings.desktop_columns",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
+    },
+    {
+      "type": "range",
+      "id": "premium_columns_tablet",
+      "label": "t:settings.tablet_columns",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
+    },
+    {
+      "type": "range",
+      "id": "premium_content_width",
+      "label": "t:settings.content_width",
+      "min": 20,
+      "max": 45,
+      "step": 1,
+      "unit": "%",
+      "default": 30,
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
+    },
+    {
+      "type": "range",
+      "id": "premium_panel_padding",
+      "label": "t:settings.panel_padding",
+      "min": 16,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "default": 32,
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
+    },
+    {
+      "type": "range",
+      "id": "premium_column_gap",
+      "label": "t:settings.column_gap",
+      "min": 12,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 28,
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
+    },
+    {
+      "type": "select",
+      "id": "premium_image_ratio",
+      "label": "t:settings.image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:options.auto"
+        },
+        {
+          "value": "4 / 5",
+          "label": "t:options.portrait"
+        },
+        {
+          "value": "1 / 1",
+          "label": "t:options.square"
+        },
+        {
+          "value": "16 / 9",
+          "label": "t:options.landscape"
+        }
+      ],
+      "default": "4 / 5",
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
+    },
+    {
+      "type": "range",
+      "id": "premium_card_radius",
+      "label": "t:settings.card_corner_radius",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "premium_show_parent_link",
+      "label": "t:settings.show_parent_link",
+      "default": true,
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "premium_show_view_all",
+      "label": "t:settings.show_view_all_link",
+      "default": true,
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
+    },
+    {
+      "type": "select",
+      "id": "premium_animation",
+      "label": "t:settings.animation",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.none"
+        },
+        {
+          "value": "fade",
+          "label": "t:options.fade"
+        },
+        {
+          "value": "slide",
+          "label": "t:options.slide"
+        }
+      ],
+      "default": "fade",
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "premium_mobile_collection_images",
+      "label": "t:settings.mobile_collection_images",
+      "default": true,
+      "visible_if": "{{ block.settings.menu_style == 'premium_mega' }}"
     },
     {
       "type": "header",
