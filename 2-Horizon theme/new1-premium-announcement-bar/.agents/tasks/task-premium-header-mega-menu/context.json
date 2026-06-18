@@ -1,0 +1,39 @@
+{
+  "project_type": "Shopify Horizon Theme v3.5.1 (Online Store 2.0)",
+  "language": "Liquid, JavaScript (ES Modules), CSS",
+  "build_system": "Shopify Theme (no build step - direct deployment). Files are Liquid templates, JS assets, CSS assets.",
+  "test_framework": "No automated test framework. Validation is syntax-based (valid Liquid, valid JSON schemas, valid JS).",
+  "build_command": "N/A - Shopify themes have no build command. Validate via syntax checks.",
+  "test_command": "N/A - No test runner. Verify via JSON schema validity, Liquid syntax, JS module syntax.",
+  "verification_instructions": "1. Verify all JSON schemas are valid JSON (parse with jq). 2. Verify JS files have no syntax errors (node --check). 3. Verify Liquid files have balanced tags. 4. Verify locale file is valid JSON.",
+  "snapshot_or_generated_files": null,
+  "setup_instructions": "No setup needed - this is a Shopify theme with static files.",
+  "environment_constraints": "No network needed. All changes are file-based. No package installs required.",
+  "contribution_requirements": "Horizon uses content_for 'block' system (NOT for block in section.blocks). Web Components extend Component from @theme/component. Uses ref='name' for JS element access. {% stylesheet %} for scoped CSS. JS must be type=module. All blocks need {{ block.shopify_attributes }}. Schema range rule: (max - min) / step <= 100. Schema range default must be on step grid from min.",
+  "key_patterns": {
+    "block_rendering": "{% content_for 'block', type: '_block-name', id: 'block-id' %} NOT {% for block in section.blocks %}",
+    "web_components": "class MyComponent extends Component { requiredRefs = [...]; connectedCallback() { super.connectedCallback(); } }",
+    "refs": "ref='name' in HTML, accessed via this.refs.name in JS",
+    "event_handlers": "on:click='/methodName' on:pointerenter='/activate'",
+    "css_scoping": "{% stylesheet %} for component-scoped CSS, {% style %} for dynamic inline styles",
+    "menu_structure": "Header > header-menu (Web Component) > overflow-list > menu-list__list-item > menu-list__submenu > mega-menu__grid > mega-menu-list snippet",
+    "color_schemes": "color-{{ scheme }} class pattern, color_scheme type in schema",
+    "import_maps": "import { Component } from '@theme/component'; import { utilities } from '@theme/utilities';",
+    "icon_pattern": "{{ 'icon-name.svg' | inline_asset_content }} for inline SVGs"
+  },
+  "relevant_files": [
+    "sections/header.liquid",
+    "blocks/_header-menu.liquid",
+    "snippets/mega-menu-list.liquid",
+    "snippets/header-actions.liquid",
+    "snippets/header-row.liquid",
+    "snippets/header-drawer.liquid",
+    "assets/header.js",
+    "assets/header-menu.js",
+    "assets/header-drawer.js",
+    "assets/header-actions.js",
+    "assets/component.js",
+    "locales/en.default.json"
+  ],
+  "directory_structure": "sections/ - section liquid files with schemas | blocks/ - block liquid files (prefixed with _) | snippets/ - reusable partials | assets/ - JS modules, CSS, SVGs | locales/ - translation JSON files | config/ - theme settings"
+}

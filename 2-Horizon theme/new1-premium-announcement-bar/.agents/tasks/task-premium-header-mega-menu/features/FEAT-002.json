@@ -1,0 +1,37 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "Enhance the mega menu with Promotional Banner/Image Block, Menu Item Badges, Custom Content Block (CTA), and multiple animation options. This adds premium-level mega menu features matching expensive Shopify themes.",
+  "status": "completed",
+  "steps": [
+    "Step 1: Create `snippets/mega-menu-promo.liquid` - A promotional banner block for inside mega menus. Accepts parameters: promo_image (image_picker), promo_heading (text), promo_text (richtext), promo_button_label (text), promo_button_link (url), promo_image_ratio (select). Renders an attractive card with image, overlay text, and CTA button. Styled with {% stylesheet %} scoped CSS. Uses aspect-ratio for the image, gradient overlay for text readability, and button styling consistent with theme.",
+    "Step 2: Modify `blocks/_header-menu.liquid` schema - Add new settings: (a) Under a 'Menu item badges' header: text 'badge_text' (for the nav item badge like 'NEW', 'SALE'), select 'badge_style' (options: 'solid', 'outline', default: 'solid'), color 'badge_color' (no blank - use checkbox), checkbox 'show_badge'. (b) Under 'Promotional block' header: checkbox 'show_promo', image_picker 'promo_image', text 'promo_heading', richtext 'promo_text', text 'promo_button_label', url 'promo_button_link', select 'promo_image_ratio' (16/9, 4/5, 1/1). (c) Under existing appearance: select 'mega_menu_animation' with options 'clip-path' (default, existing behavior), 'fade', 'slide-down', 'scale-up'.",
+    "Step 3: Modify `blocks/_header-menu.liquid` HTML rendering (desktop menu) - In the {% capture children %} block where menu items are rendered, add a badge span element after the link title if block_settings.show_badge is true and block_settings.badge_text is not blank. Badge should be a <span class='menu-list__badge'> with the badge text. Style it absolutely positioned or inline.",
+    "Step 4: Modify `snippets/mega-menu-list.liquid` - After the existing {% endcase %} for featured content, add a conditional block: if show_promo is true and promo_image is not blank, render the mega-menu-promo snippet. Pass show_promo, promo_image, promo_heading, promo_text, promo_button_label, promo_button_link, promo_image_ratio as parameters. The promo block should span the rightmost columns of the mega menu grid (similar to how mega-menu__content works).",
+    "Step 5: Modify the mega-menu-list render call in `blocks/_header-menu.liquid` - Pass new parameters: show_promo, promo_image, promo_heading, promo_text, promo_button_label, promo_button_link, promo_image_ratio from block_settings to the mega-menu-list snippet render.",
+    "Step 6: Modify `assets/header-menu.js` - Add animation mode support. Read a data-animation attribute from the header-menu element. In the activate method, before setting --submenu-opacity, apply the appropriate animation class/style based on the animation mode. For 'fade': just opacity transition. For 'slide-down': translateY animation. For 'scale-up': scale transform from 0.95 to 1. For 'clip-path': keep existing behavior (default).",
+    "Step 7: Modify `blocks/_header-menu.liquid` CSS ({% stylesheet %}) - Add styles for: (a) .menu-list__badge - small pill-shaped badge (font-size: 0.625rem, padding: 2px 6px, border-radius: 9999px, positioned relative to link title, background from custom property --badge-color). (b) Animation variants via [data-animation='fade/slide-down/scale-up'] selectors that override the default clip-path animation with appropriate alternatives. (c) Promo block integration styles.",
+    "Step 8: Add CSS for mega-menu-promo in the `snippets/mega-menu-promo.liquid` stylesheet - card with rounded corners (matching image_border_radius), image cover, gradient overlay, positioned text, button on hover/focus. Responsive - hidden on mobile/tablet if needed.",
+    "Step 9: Modify `blocks/_header-menu.liquid` HTML - Add data-animation attribute on the <header-menu> element set to {{ block_settings.mega_menu_animation }}.",
+    "Step 10: Update `locales/en.default.json` - Add keys: 'badge_text', 'show_badge', 'badge_style', 'badge_color', 'show_promo', 'promo_heading', 'promo_text', 'promo_button_label', 'promo_button_link', 'promo_image_ratio', 'mega_menu_animation', 'clip_path', 'fade', 'slide_down', 'scale_up', 'promotional_block', 'menu_item_badges'."
+  ],
+  "acceptance_criteria": [
+    "snippets/mega-menu-promo.liquid exists with proper image+text+CTA card rendering",
+    "blocks/_header-menu.liquid schema has badge settings (show_badge, badge_text, badge_style, badge_color)",
+    "blocks/_header-menu.liquid schema has promo settings (show_promo, promo_image, promo_heading, promo_text, promo_button_label, promo_button_link)",
+    "blocks/_header-menu.liquid schema has mega_menu_animation select (clip-path, fade, slide-down, scale-up)",
+    "Badge HTML renders conditionally on menu items with proper styling",
+    "Promo block renders inside mega menu dropdown when enabled",
+    "header-menu.js supports data-animation attribute for different animation modes",
+    "Animation CSS covers all 4 modes (clip-path default, fade, slide-down, scale-up)",
+    "All JSON is valid and parseable"
+  ],
+  "verification": [
+    "Run: node --check assets/header-menu.js to verify JS syntax",
+    "Run: node -e \"JSON.parse(require('fs').readFileSync('locales/en.default.json'))\" to verify locale JSON validity",
+    "Verify snippets/mega-menu-promo.liquid exists with proper Liquid structure",
+    "Verify blocks/_header-menu.liquid schema JSON is valid (extract and parse)"
+  ],
+  "blocked_reason": null,
+  "findings": "All validation passes. Used NODE_OPTIONS='' prefix for node commands (as per FEAT-001 findings). Schema uses JSONC format. Badge added only to first menu item via forloop.first condition. Animation is CSS-driven via data-animation attribute - minimal JS changes needed."
+}

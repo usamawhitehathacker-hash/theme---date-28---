@@ -1,0 +1,42 @@
+{
+  "id": "FEAT-003",
+  "type": "feat",
+  "description": "Add Wishlist Icon in header actions and Mobile Bottom Navigation Bar. This adds a heart/wishlist icon with count badge to the header utility area, and creates a fixed mobile bottom navigation bar with Home, Search, Menu, Wishlist, and Cart icons.",
+  "status": "completed",
+  "steps": [
+    "Step 1: Create `assets/icon-wishlist.svg` - A heart outline SVG icon matching the existing icon style (stroke-based, currentColor, similar viewBox to other header icons like the cart icon which is ~24x24).",
+    "Step 2: Modify `snippets/header-actions.liquid` - Add a wishlist icon link BEFORE the cart icon section. Conditionally render if section.settings.show_wishlist is true. Render as an <a> tag linking to section.settings.wishlist_page (url setting) or '/pages/wishlist' default. Include the heart SVG icon inline and a wishlist count bubble (span with class 'wishlist-bubble' and id 'wishlist-count', default hidden). Include both icon and text display modes following the existing cart_icon pattern.",
+    "Step 3: Modify `sections/header.liquid` schema - Add under a 'Wishlist' header: checkbox 'show_wishlist' (default false), url 'wishlist_page' (label: 'Wishlist page link').",
+    "Step 4: Create `snippets/mobile-bottom-nav.liquid` - A fixed bottom navigation bar for mobile. Contains 5 items: Home (house icon, links to /), Search (magnifier icon, triggers search modal), Menu (hamburger icon, triggers mobile drawer), Wishlist (heart icon, links to wishlist page), Cart (cart icon with bubble count, links to cart). Use semantic nav element with role='navigation'. Style with {% stylesheet %}: fixed bottom 0, full width, background from color scheme, z-index above content but below modals, flex layout with equal spacing, padding-bottom for safe area (env(safe-area-inset-bottom)). Hide on desktop (display: none above 749px). Each item has icon + small label text below.",
+    "Step 5: Create `assets/mobile-bottom-nav.js` - A Web Component (mobile-bottom-nav) extending Component from @theme/component. It handles: (a) active state highlighting based on current page, (b) triggering search modal open when search button is tapped (dispatches custom event or calls the search component's open method), (c) triggering mobile drawer open when menu button is tapped. Use refs for the interactive buttons.",
+    "Step 6: Modify `sections/header.liquid` HTML - After the closing </header-component> tag but still inside the section, conditionally render the mobile-bottom-nav snippet if section.settings.show_mobile_bottom_nav is true. Pass wishlist_page and show_wishlist settings.",
+    "Step 7: Modify `sections/header.liquid` schema - Add under a 'Mobile bottom navigation' header: checkbox 'show_mobile_bottom_nav' (default false).",
+    "Step 8: Create SVG icons needed: `assets/icon-home.svg` (house outline), `assets/icon-menu-hamburger.svg` (3 horizontal lines). The search icon and cart icon already exist in the theme.",
+    "Step 9: Add CSS in `snippets/header-actions.liquid` stylesheet for the wishlist icon - Style .header-actions__wishlist with same sizing as cart icon. Style .wishlist-bubble similar to cart-bubble.",
+    "Step 10: Modify `sections/header.liquid` stylesheet - Add body padding-bottom when mobile bottom nav is active to prevent content being hidden behind the fixed bar: body:has(mobile-bottom-nav) { padding-bottom: var(--mobile-bottom-nav-height, 60px); } on mobile only.",
+    "Step 11: Update `locales/en.default.json` - Add keys: 'wishlist', 'show_wishlist', 'wishlist_page', 'show_mobile_bottom_nav', 'mobile_bottom_nav', 'home', 'menu', 'search', 'cart', 'wishlist_count'."
+  ],
+  "acceptance_criteria": [
+    "assets/icon-wishlist.svg exists as a heart outline SVG",
+    "snippets/header-actions.liquid renders wishlist icon conditionally with proper display modes",
+    "sections/header.liquid schema has show_wishlist and wishlist_page settings",
+    "snippets/mobile-bottom-nav.liquid exists with 5 nav items (Home, Search, Menu, Wishlist, Cart)",
+    "assets/mobile-bottom-nav.js exists as a valid Web Component extending Component",
+    "Mobile bottom nav is rendered conditionally after header-component",
+    "sections/header.liquid schema has show_mobile_bottom_nav setting",
+    "SVG icons for home and hamburger menu exist",
+    "Wishlist styling matches existing header action patterns",
+    "Mobile bottom nav has fixed positioning with safe-area support",
+    "All JSON is valid and parseable",
+    "All JS files pass syntax check"
+  ],
+  "verification": [
+    "Run: node --check assets/mobile-bottom-nav.js to verify JS syntax",
+    "Run: node -e \"JSON.parse(require('fs').readFileSync('locales/en.default.json'))\" to verify locale JSON validity",
+    "Verify snippets/mobile-bottom-nav.liquid exists",
+    "Verify snippets/header-actions.liquid contains wishlist icon code",
+    "Verify all new SVG files exist in assets/"
+  ],
+  "blocked_reason": null,
+  "findings": "All validation passes. Used NODE_OPTIONS='' prefix for node commands (as per FEAT-001 findings). Locale uses JSONC format. Added wishlist icon between account and cart sections in header-actions.liquid. Mobile bottom nav uses Component base class from @theme/component with on:click event handlers. Schema settings placed before Appearance header group. The header-actions.liquid snippet receives section object as a parameter from the parent render call so section.settings.show_wishlist is accessible."
+}
