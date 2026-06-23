@@ -12,25 +12,14 @@
 {%- enddoc -%}
 
 {% liquid
-  assign header_settings = section.settings
+  assign block_settings = block.settings
   assign max_featured_items = 4
-  assign image_border_radius = header_settings.image_border_radius
-  assign drawer_menu_style = header_settings.menu_style
-  assign drawer_color_scheme = header_settings.menu_color_scheme
-  assign drawer_accordion = header_settings.drawer_accordion
-  assign drawer_accordion_expand_first = header_settings.drawer_accordion_expand_first
-  assign drawer_dividers = header_settings.drawer_dividers
+  assign image_border_radius = block_settings.image_border_radius
 
-  assign premium_mobile_collection_images = section.settings.premium_mobile_collection_images
-
-  if drawer_menu_style == 'premium_mega' and premium_mobile_collection_images
-    assign drawer_menu_style = 'collection_images'
-  endif
-
-  if drawer_menu_style == 'featured_collections'
-    assign ratio = header_settings.featured_collections_aspect_ratio
-  elsif drawer_menu_style == 'featured_products'
-    assign ratio = header_settings.featured_products_aspect_ratio
+  if block_settings.menu_style == 'featured_collections'
+    assign ratio = block_settings.featured_collections_aspect_ratio
+  elsif block_settings.menu_style == 'featured_products'
+    assign ratio = block_settings.featured_products_aspect_ratio
   endif
 
   ##
@@ -81,7 +70,7 @@
       ref="menuDrawer"
       class="
         menu-drawer
-        color-{{ drawer_color_scheme }}
+        color-{{ block_settings.color_scheme }}
       "
     >
       <button
@@ -97,8 +86,8 @@
       <nav
         class="menu-drawer__navigation"
         style="
-          {%- render 'menu-font-styles', settings: header_settings, menu_type: 'drawer' %}
-          {%- render 'submenu-font-styles', settings: header_settings %}
+          {%- render 'menu-font-styles', settings: block_settings, menu_type: 'drawer' %}
+          {%- render 'submenu-font-styles', settings: block_settings %}
         "
         aria-label="{{ 'accessibility.header_navigation_label' | t }}"
       >
@@ -116,15 +105,15 @@
               {% assign animation_index = animation_index | plus: 1 %}
               <li
                 style="--menu-drawer-animation-index: {{ animation_index }};"
-                class="{%- if drawer_accordion -%}menu-drawer__list-item--deep{%- else -%}menu-drawer__list-item--flat{%- endif -%}{% if drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
+                class="{%- if block_settings.drawer_accordion -%}menu-drawer__list-item--deep{%- else -%}menu-drawer__list-item--flat{%- endif -%}{% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}"
               >
-                {% if drawer_accordion and link.links != blank %}
+                {% if block_settings.drawer_accordion and link.links != blank %}
                   {%- comment -%}
                     Accordion for links with children, in menus with fewer than 3 levels of links
                   {%- endcomment -%}
                   {% liquid
                     assign should_open_first = false
-                    if first_accordion_open == false and drawer_accordion_expand_first
+                    if first_accordion_open == false and block_settings.drawer_accordion_expand_first
                       assign first_accordion_open = true
                       assign should_open_first = true
                     endif
@@ -144,7 +133,7 @@
                       </summary>
                       {% liquid
                         assign render_link_image = false
-                        if drawer_menu_style == 'collection_images'
+                        if block_settings.menu_style == 'collection_images'
                           assign catalog_links = link.links | where: 'type', 'catalog_link'
                           assign collection_list_links = link.links | where: 'type', 'collections_link'
                           assign collection_links = link.links | where: 'type', 'collection_link'
@@ -189,7 +178,7 @@
                     children: accordion_children,
                     open_by_default_on_mobile: should_open_first
                   %}
-                {% elsif drawer_accordion == false and link.links != blank %}
+                {% elsif block_settings.drawer_accordion == false and link.links != blank %}
                   {%- comment -%}
                     Flat menus for links with children, in menus with fewer than 3 levels of links
                   {%- endcomment -%}
@@ -205,7 +194,7 @@
                   </a>
                   {% liquid
                     assign render_link_image = false
-                    if drawer_menu_style == 'collection_images'
+                    if block_settings.menu_style == 'collection_images'
                       assign catalog_links = link.links | where: 'type', 'catalog_link'
                       assign collection_list_links = link.links | where: 'type', 'collections_link'
                       assign collection_links = link.links | where: 'type', 'collection_link'
@@ -277,7 +266,7 @@
                   {%- endcomment -%}
                   <details
                     id="Details-menu-drawer-menu-item-{{ forloop.index }}"
-                    class="menu-drawer__menu-container{% if drawer_dividers %} menu-drawer__menu-container--divider{% endif %}"
+                    class="menu-drawer__menu-container{% if block_settings.drawer_dividers %} menu-drawer__menu-container--divider{% endif %}"
                   >
                     <summary
                       id="HeaderDrawer-{{ link.handle }}"
@@ -320,7 +309,7 @@
                         </div>
                         {% liquid
                           assign render_link_image = false
-                          if drawer_menu_style == 'collection_images'
+                          if block_settings.menu_style == 'collection_images'
                             assign catalog_links = link.links | where: 'type', 'catalog_link'
                             assign collection_list_links = link.links | where: 'type', 'collections_link'
                             assign collection_links = link.links | where: 'type', 'collection_link'
@@ -340,9 +329,9 @@
                               class="
                                 menu-drawer__list-item
                                 {% if childlink.links != blank -%}
-                                  {% if drawer_accordion -%} menu-drawer__list-item--deep{% else -%} menu-drawer__list-item--flat{%- endif -%}
+                                  {% if block_settings.drawer_accordion -%} menu-drawer__list-item--deep{% else -%} menu-drawer__list-item--flat{%- endif -%}
                                 {%- endif -%}
-                                {% if drawer_dividers %} menu-drawer__list-item--divider{% endif %}
+                                {% if block_settings.drawer_dividers %} menu-drawer__list-item--divider{% endif %}
                               "
                             >
                               {%- if childlink.links == blank -%}
@@ -372,12 +361,12 @@
                               {%- else -%}
                                 {% liquid
                                   assign should_open_first_nested = false
-                                  if first_accordion_open == false and drawer_accordion and drawer_accordion_expand_first
+                                  if first_accordion_open == false and block_settings.drawer_accordion and block_settings.drawer_accordion_expand_first
                                     assign first_accordion_open = true
                                     assign should_open_first_nested = true
                                   endif
                                 %}
-                                {% if drawer_accordion %}
+                                {% if block_settings.drawer_accordion %}
                                   {%- comment -%}
                                     Accordion for links with children, in menus with 3 levels of links
                                   {%- endcomment -%}
@@ -398,7 +387,7 @@
                                       </summary>
                                       {% liquid
                                         assign render_link_image = false
-                                        if drawer_menu_style == 'collection_images'
+                                        if block_settings.menu_style == 'collection_images'
                                           assign catalog_links = childlink.links | where: 'type', 'catalog_link'
                                           assign collection_list_links = childlink.links | where: 'type', 'collections_link'
                                           assign collection_links = childlink.links | where: 'type', 'collection_link'
@@ -463,7 +452,7 @@
                                   </a>
                                   {% liquid
                                     assign render_link_image = false
-                                    if drawer_menu_style == 'collection_images'
+                                    if block_settings.menu_style == 'collection_images'
                                       assign catalog_links = childlink.links | where: 'type', 'catalog_link'
                                       assign collection_list_links = childlink.links | where: 'type', 'collections_link'
                                       assign collection_links = childlink.links | where: 'type', 'collection_link'
@@ -511,11 +500,11 @@
                         </ul>
                         {% liquid
                           if eager_loading
-                            if drawer_menu_style == 'featured_collections'
+                            if block_settings.menu_style == 'featured_collections'
                               assign featured_collections = link.links | where: 'type', 'collection_link'
                             endif
 
-                            if drawer_menu_style == 'featured_products'
+                            if block_settings.menu_style == 'featured_products'
                               assign collection_linklist = link.links | where: 'type', 'collection_link' | first
                               assign featured_products_collection = collection_linklist.object
                             endif
@@ -715,11 +704,11 @@
       </div>
 
       {% liquid
-        if drawer_menu_style == 'featured_collections'
+        if block_settings.menu_style == 'featured_collections'
           assign top_level_featured_collections = linklist.links | where: 'type', 'collection_link'
         endif
 
-        if eager_loading and drawer_menu_style == 'featured_products'
+        if eager_loading and block_settings.menu_style == 'featured_products'
           for link in linklist.links
             if link.type == 'collection_link'
               assign collection_linklist = link
